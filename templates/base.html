@@ -30,7 +30,7 @@
                         <li><a href="#">portfolio</a></li>
                     {% endif %}
                     {% if session.user %}
-                        <li><a href="#">logout</a></li>
+                        <li><a href="{{ url_for('logout') }}">logout</a></li>
                     {% else %}
                         <li><a href="{{ url_for('login') }}">login</a></li>
                         <li><a class="btn btn-green" href="{{ url_for('register') }}">register</a></li>
@@ -48,9 +48,9 @@
                 <li><a href="#">portfolio</a></li>
             {% endif %}
             {% if session.user %}
-                <li><a href="#">logout</a></li>
+                <li><a href="{{ url_for('logout') }}">logout</a></li>
             {% else %}
-                <li><a href="#">login</a></li>
+                <li><a href="{{ url_for('login') }}">login</a></li>
                 <li><a class="btn btn-green" href="{{ url_for('register') }}">register</a></li>
             {% endif %}
         </ul>

@@ -44,11 +44,13 @@ def register():
             flash("Email already exists")
             return redirect(url_for("register"))
 
+        # put the data from the form in a variable
         register = {
             "username": request.form.get("username").lower(),
             "email": request.form.get("email").lower(),
             "password": generate_password_hash(request.form.get("password"))
         }
+        # push the data from the form to the db
         mongo.db.users.insert_one(register)
 
         # put the new user into 'session' cookie
@@ -87,8 +89,15 @@ def login():
             # email doesn't exist
             flash("Incorrect Email and/or Password")
             return redirect(url_for("login"))
-
     return render_template("login.html")
+
+
+@app.route("/logout")
+def logout():
+    # remove user from session cookies
+    flash("You have been logged out")
+    session.pop("user")
+    return redirect(url_for("login"))
 
 
 if __name__ == "__main__":
