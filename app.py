@@ -19,7 +19,7 @@ mongo = PyMongo(app)
 
 
 @app.route("/")
-def baseTest():
+def home():
     return render_template("index.html")
 
 
@@ -51,6 +51,11 @@ def register():
             "password": generate_password_hash(request.form.get("password"))
         }
         mongo.db.users.insert_one(register)
+
+        # put the new user into 'session' cookie
+        session["user"] = request.form.get("username").lower()
+        flash("Registration Successful!")
+        return redirect(url_for("home", username=session["user"]))
     return render_template("register.html")
 
 
