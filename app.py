@@ -26,6 +26,25 @@ def baseTest():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
+        # make variable to check if email address exists in db
+        existing_email = mongo.db.users.find_one(
+            {"email": request.form.get(
+                "email").lower()})
+
+        # make variable to check if username address exists in db
+        existing_user = mongo.db.users.find_one(
+            {"username": request.form.get("username").lower()})
+
+        # check if username already exists in db
+        if existing_user:
+            flash("Username already exists")
+            return redirect(url_for("register"))
+
+        # check if email already exists in db
+        if existing_email:
+            flash("Email already exists")
+            return redirect(url_for("register"))
+
         register = {
             "username": request.form.get("username").lower(),
             "email": request.form.get("email").lower(),
