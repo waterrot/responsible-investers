@@ -53,16 +53,19 @@ def home():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
+        # check if the username is valide
         if request.form.get("username") == "" or not check_username(
            request.form.get("username").lower()):
             flash(
                 "Username is not valide. Use between 5-15 character" +
                 " and only letters and numbers.")
             return redirect(url_for("register"))
+        # check if the email is valide
         if request.form.get("email") == "" or not check_email(
            request.form.get("email").lower()):
             flash("Please fill in a valid email address.")
             return redirect(url_for("register"))
+        # check if the password is valide
         if request.form.get("password") == "" or not check_pw(
            request.form.get("password")):
             flash(
@@ -107,6 +110,19 @@ def register():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
+        # check if the email is valide
+        if request.form.get("email") == "" or not check_email(
+           request.form.get("email").lower()):
+            flash("Please fill in a valid email address.")
+            return redirect(url_for("login"))
+        # check if the password is valide
+        if request.form.get("password") == "" or not check_pw(
+           request.form.get("password")):
+            flash(
+                "Password is not valid. use between the 5-15 " +
+                "characters")
+            return redirect(url_for("login"))
+
         # make variable to check if user exists in db
         # by using the email address
         existing_user = mongo.db.users.find_one(
