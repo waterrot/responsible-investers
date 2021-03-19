@@ -19,14 +19,16 @@ def check_email(email):
     return re.search(regex, email)
 
 
+# function to check if the username is valide
 def check_username(name):
     # check if the username is valide
     # allow letters and hyphens. No spaces and
-    # a max length of 15 character.
-    regex = "^[a-zA-Z-]{0,15}$"
+    # a max length of 20 character.
+    regex = "^[a-zA-Z0-9]{5,20}$"
     return re.match(regex, name)
 
 
+# function to check if the password is valide
 def check_pw(password):
     # check if the password is valide
     # allow all characters with a max length of 5-20
@@ -51,6 +53,23 @@ def home():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
+        if request.form.get("username") == "" or not check_username(
+           request.form.get("username").lower()):
+            flash(
+                "Username is not valide. Use between 5-15 character" +
+                " and only letters and numbers.")
+            return redirect(url_for("register"))
+        if request.form.get("email") == "" or not check_email(
+           request.form.get("email").lower()):
+            flash("Please fill in a valid email address.")
+            return redirect(url_for("register"))
+        if request.form.get("password") == "" or not check_pw(
+           request.form.get("password")):
+            flash(
+                "Password is not valid. use between the 5-15 " +
+                "characters")
+            return redirect(url_for("register"))
+
         # make variable to check if email address exists in db
         existing_email = mongo.db.users.find_one(
             {"email": request.form.get("email").lower()})

@@ -18,7 +18,8 @@
                 <div class="row">
                     <div class="input-field col s12">
                         <i class="fas fa-at prefix blue-text text-darken-1"></i>
-                        <input id="email" name="email" type="email" class="validate" required>
+                        <input id="email" name="email" type="email"
+                            pattern="^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$" class="validate" required>
                         <label for="email">Email</label>
                     </div>
                 </div>
