@@ -28,8 +28,7 @@ def register():
     if request.method == "POST":
         # make variable to check if email address exists in db
         existing_email = mongo.db.users.find_one(
-            {"email": request.form.get(
-                "email").lower()})
+            {"email": request.form.get("email").lower()})
 
         # make variable to check if username address exists in db
         existing_user = mongo.db.users.find_one(
@@ -57,6 +56,39 @@ def register():
         flash("Registration Successful!")
         return redirect(url_for("home", username=session["user"]))
     return render_template("register.html")
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        # make variable to check if user exists in db
+        # by using the email address
+        existing_user = mongo.db.users.find_one(
+            {"email": request.form.get("email").lower()})
+
+        if existing_user:
+            # ensure hashed password matches user input
+            if check_password_hash(
+                 existing_user["password"], request.form.get("password")):
+                # if the password and email do match then
+                # put the usersname into session cookie
+                session["user"] = existing_user[
+                    "username"].lower()
+                # display a welcome message to the user
+                flash("Welcome, {}".format(
+                    existing_user["username"].lower()))
+                return redirect(url_for(
+                    "home", username=session["user"]))
+            else:
+                # invalid password match
+                flash("Incorrect Email and/or Password")
+                return redirect(url_for("login"))
+        else:
+            # email doesn't exist
+            flash("Incorrect Email and/or Password")
+            return redirect(url_for("login"))
+
+    return render_template("login.html")
 
 
 if __name__ == "__main__":
