@@ -4,11 +4,11 @@
 }
 
 /* Button styling */
-li a.btn{
+.btn-green{
     background-color: #00c853;
 }
 
-li a.btn:hover {
+.btn-green:hover {
     background-color: #2e7d32 !important;
 }
 
