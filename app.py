@@ -1,4 +1,5 @@
 import os
+import re
 from flask import (
     Flask, flash, render_template,
     redirect, request, session, url_for)
@@ -7,6 +8,30 @@ from bson.objectid import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
 if os.path.exists("env.py"):
     import env
+
+
+# function to check if the email is valide
+# Regex solution sourced from here:
+# https://www.geeksforgeeks.org/check-if-email-address-valid-or-not-in-python/
+def check_email(email):
+    # Check if the email iput matches the email regex.
+    regex = "^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$"
+    return re.search(regex, email)
+
+
+def check_username(name):
+    # check if the username is valide
+    # allow letters and hyphens. No spaces and
+    # a max length of 15 character.
+    regex = "^[a-zA-Z-]{0,15}$"
+    return re.match(regex, name)
+
+
+def check_pw(password):
+    # check if the password is valide
+    # allow all characters with a max length of 5-20
+    regex = "^.{5,20}$"
+    return re.match(regex, password)
 
 
 app = Flask(__name__)
