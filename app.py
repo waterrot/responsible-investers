@@ -6,6 +6,7 @@ from flask import (
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
+from yahoo_fin import stock_info as si
 if os.path.exists("env.py"):
     import env
 
@@ -47,7 +48,19 @@ mongo = PyMongo(app)
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    stock_table = si.get_quote_table("uber")
+    stock_info_first_part = {}
+    stock_info_second_part = {}
+    for index, (k, v) in enumerate(stock_table.items()):
+        if index <= 8:
+            add_info = {k: v}
+            stock_info_first_part.update(add_info)
+        else:
+            add_info = {k: v}
+            stock_info_second_part.update(add_info)
+    return render_template(
+        "index.html", stock_info_first_part=stock_info_first_part,
+        stock_info_second_part=stock_info_second_part)
 
 
 @app.route("/register", methods=["GET", "POST"])

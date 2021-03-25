@@ -1,4 +1,31 @@
 {% extends "base.html" %}
 {% block content %}
 
+    <div class="row">
+        <div class="col s12 m6">
+            <table class="striped">
+                <tbody>
+                    {% for k, v in stock_info_first_part.items() %}
+                            <tr>
+                                <td><b>{% print(k) %}:</b></td>
+                                <td>{% print(v) %}:</td>
+                            </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col s12 m6">
+            <table class="striped">
+                <tbody>
+                    {% for k, v in stock_info_second_part.items() %}
+                            <tr>
+                                <td><b>{% print(k) %}:</b></td>
+                                <td>{% print(v) %}:</td>
+                            </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 {% endblock %}
