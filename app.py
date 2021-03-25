@@ -7,6 +7,7 @@ from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
 from yahoo_fin import stock_info as si
+from yahoofinancials import YahooFinancials as yf
 if os.path.exists("env.py"):
     import env
 
@@ -48,9 +49,14 @@ mongo = PyMongo(app)
 
 @app.route("/")
 def home():
-    stock_table = si.get_quote_table("uber")
+    stock_name = "uber"
+    stock_price_unround = si.get_live_price(stock_name)
+    stock_price = round(stock_price_unround, 2)
+    # get the stock data for in the table
+    stock_table = si.get_quote_table(stock_name)
     stock_info_first_part = {}
     stock_info_second_part = {}
+    # make 2 dict of the data
     for index, (k, v) in enumerate(stock_table.items()):
         if index <= 8:
             add_info = {k: v}
@@ -60,7 +66,7 @@ def home():
             stock_info_second_part.update(add_info)
     return render_template(
         "index.html", stock_info_first_part=stock_info_first_part,
-        stock_info_second_part=stock_info_second_part)
+        stock_info_second_part=stock_info_second_part, stock_price=stock_price)
 
 
 @app.route("/register", methods=["GET", "POST"])
