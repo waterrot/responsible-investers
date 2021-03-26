@@ -3,7 +3,7 @@
 
     <div class="row">
         <div class="col s12">
-            <h2>The stockname with the price: ${{ stock_price }}</h2>
+            <h2>Uber Technologies, Inc. (UBER)</h2>
         </div>
     </div>
     <div class="row">
@@ -11,7 +11,15 @@
             <img class="responsive-img" src="{{ url_for('static', filename='images/yahoo_price_uber.png') }}" alt="uber price graph">        
         </div>
         <div class="col s12 l6">
-
+            <h4> the current price is: ${{ stock_price }} 
+                {% if change_percent_price > 0 %}
+                    (= <i class="green-text">{{ change_percent_price }}%</i>)
+                {% elif change_percent_price < 0 %}
+                    (= <i class="red-text">({{ change_percent_price }}%</i>)
+                {% else %}
+                    (= <i class="blue-text">{{ change_percent_price }}%</i>)
+                {% endif %}
+            </h4>
         </div>
     </div>
     <div class="divider"></div>
@@ -22,7 +30,7 @@
                     {% for k, v in stock_info_first_part.items() %}
                             <tr>
                                 <td><b>{% print(k) %}:</b></td>
-                                <td>{% print(v) %}:</td>
+                                <td>{% print(v) %}</td>
                             </tr>
                     {% endfor %}
                 </tbody>
@@ -34,7 +42,7 @@
                     {% for k, v in stock_info_second_part.items() %}
                             <tr>
                                 <td><b>{% print(k) %}:</b></td>
-                                <td>{% print(v) %}:</td>
+                                <td>{% print(v) %}</td>
                             </tr>
                     {% endfor %}
                 </tbody>

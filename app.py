@@ -50,8 +50,16 @@ mongo = PyMongo(app)
 @app.route("/")
 def home():
     stock_name = "uber"
-    stock_price_unround = si.get_live_price(stock_name)
-    stock_price = round(stock_price_unround, 2)
+    yf2 = yf(stock_name)
+    #get the stock price
+    stock_price = round(si.get_live_price(stock_name), 2)
+    # the market close price of a stock
+    close_price = yf2.get_prev_close_price()
+    # the absoluut price change since market opening
+    change_price = yf2.get_current_change()
+    # the relate percent change since market opening
+    change_percent_price = round(change_price*100/close_price, 2)
+
     # get the stock data for in the table
     stock_table = si.get_quote_table(stock_name)
     stock_info_first_part = {}
@@ -66,7 +74,8 @@ def home():
             stock_info_second_part.update(add_info)
     return render_template(
         "index.html", stock_info_first_part=stock_info_first_part,
-        stock_info_second_part=stock_info_second_part, stock_price=stock_price)
+        stock_info_second_part=stock_info_second_part, stock_price=stock_price,
+        change_percent_price=change_percent_price)
 
 
 @app.route("/register", methods=["GET", "POST"])
