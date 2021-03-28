@@ -8,10 +8,10 @@
     </div>
     <div class="row">
         <div class="col s12 l6">
-            <img class="responsive-img" src="{{ url_for('static', filename='images/yahoo_price_uber.png') }}" alt="uber price graph">        
+            <img class="responsive-img" src="{{ url_for('static', filename='images/yahoo_price_uber.png') }}" alt="uber price graph">
         </div>
         <div class="col s12 l6">
-            <h4> the current price is: ${{ stock_price }} 
+            <h4><b>Stock price:</b> ${{ stock_price }}
                 {% if change_percent_price > 0 %}
                     (= <i class="green-text">{{ change_percent_price }}%</i>)
                 {% elif change_percent_price < 0 %}
@@ -20,6 +20,27 @@
                     (= <i class="blue-text">{{ change_percent_price }}%</i>)
                 {% endif %}
             </h4>
+            <form>
+                <div class="row">
+                    <h5 class="col s12">How many stocks would you like to buy?</h5>
+                    <!-- here you can put in the number of stock you would like to buy -->
+                    <div class="input-field col s2">
+                        <label for="stock_total">quantity</label>
+                        <input type="number" name="stock_total" id="stock_total" min="0" required />
+                    </div>
+                    <div class="input-field col s1">
+                        <p>=></p>
+                    </div>
+                    <!-- in this div holds the stock price and it is not vissiable -->
+                    <div class="hide">
+                        <input name="stock_price_changing" id="stock_price_changing" value="{{ stock_price }}" disabled>
+                    </div>
+                    <!-- here is the price of the number of stocks shown -->
+                    <div class="input-field col s3">
+                        <input type="number" name="total_price" id="total_price" placeholder="price in $" readonly />
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
     <div class="divider"></div>
@@ -28,10 +49,10 @@
             <table class="striped">
                 <tbody>
                     {% for k, v in stock_info_first_part.items() %}
-                            <tr>
-                                <td><b>{% print(k) %}:</b></td>
-                                <td>{% print(v) %}</td>
-                            </tr>
+                        <tr>
+                            <td><b>{% print(k) %}:</b></td>
+                            <td>{% print(v) %}</td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -40,10 +61,10 @@
             <table class="striped">
                 <tbody>
                     {% for k, v in stock_info_second_part.items() %}
-                            <tr>
-                                <td><b>{% print(k) %}:</b></td>
-                                <td>{% print(v) %}</td>
-                            </tr>
+                        <tr>
+                            <td><b>{% print(k) %}:</b></td>
+                            <td>{% print(v) %}</td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>
