@@ -26,7 +26,7 @@
                     <!-- here you can put in the number of stock you would like to buy -->
                     <div class="input-field col s2">
                         <label for="stock_total">quantity</label>
-                        <input type="number" name="stock_total" id="stock_total" min="0" required />
+                        <input type="number" name="stock_total" id="stock_total" min="0" max="{{ max_amount }}" required />
                     </div>
                     <div class="input-field col s1">
                         <p>=></p>

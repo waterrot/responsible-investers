@@ -1,5 +1,6 @@
 import os
 import re
+import math
 from flask import (
     Flask, flash, render_template,
     redirect, request, session, url_for)
@@ -57,14 +58,21 @@ def home():
 def stock(stock_info_id):
     stock_dic = mongo.db.stock_info.find_one({"_id": ObjectId(stock_info_id)})
     for key, value in stock_dic.items():
+        # get the sort stock name from db
         if key == "stock_name_short":
            stock_name = value
+        # get the whole stock name from db
         if key == "stock_name":
             stock_title = value
+    # get the amount of free cash of the user
+    cash_of_user = mongo.db.users.find_one(
+        {"username": session["user"]})["cash"]
 
     yf2 = yf(stock_name)
     # get the stock price
     stock_price = round(si.get_live_price(stock_name), 2)
+    # get max amount of stocks you can buy
+    max_amount = math.floor(int(cash_of_user) / stock_price)
     # the market close price of a stock
     close_price = yf2.get_prev_close_price()
     # the absoluut price change since market opening
@@ -87,7 +95,8 @@ def stock(stock_info_id):
     return render_template(
         "stock.html", stock_info_first_part=stock_info_first_part,
         stock_info_second_part=stock_info_second_part, stock_price=stock_price,
-        change_percent_price=change_percent_price, stock_title=stock_title)
+        change_percent_price=change_percent_price, stock_title=stock_title,
+        max_amount=max_amount)
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -135,7 +144,8 @@ def register():
         register = {
             "username": request.form.get("username").lower(),
             "email": request.form.get("email").lower(),
-            "password": generate_password_hash(request.form.get("password"))
+            "password": generate_password_hash(request.form.get("password")),
+            "cash": 100000
         }
         # push the data from the form to the db
         mongo.db.users.insert_one(register)
