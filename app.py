@@ -49,7 +49,19 @@ mongo = PyMongo(app)
 
 @app.route("/")
 def home():
-    stock_name = "uber"
+    stocks = list(mongo.db.stock_info.find())
+    return render_template("index.html", stocks=stocks)
+
+
+@app.route("/stock/<stock_info_id>", methods=["GET", "POST"])
+def stock(stock_info_id):
+    stock_dic = mongo.db.stock_info.find_one({"_id": ObjectId(stock_info_id)})
+    for key, value in stock_dic.items():
+        if key == "stock_name_short":
+           stock_name = value
+        if key == "stock_name":
+            stock_title = value
+
     yf2 = yf(stock_name)
     # get the stock price
     stock_price = round(si.get_live_price(stock_name), 2)
@@ -73,9 +85,9 @@ def home():
             add_info = {k: v}
             stock_info_second_part.update(add_info)
     return render_template(
-        "index.html", stock_info_first_part=stock_info_first_part,
+        "stock.html", stock_info_first_part=stock_info_first_part,
         stock_info_second_part=stock_info_second_part, stock_price=stock_price,
-        change_percent_price=change_percent_price)
+        change_percent_price=change_percent_price, stock_title=stock_title)
 
 
 @app.route("/register", methods=["GET", "POST"])
