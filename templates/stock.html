@@ -20,7 +20,7 @@
                     (= <i class="blue-text">{{ change_percent_price }}%</i>)
                 {% endif %}
             </h4>
-            <form>
+            <form method="POST" action="{{ url_for('stock_page', stock_info_id=stock_dic._id) }}">
                 <div class="row">
                     <h5 class="col s12">How many stocks would you like to buy?</h5>
                     <!-- here you can put in the number of stock you would like to buy -->

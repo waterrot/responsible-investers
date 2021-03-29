@@ -55,7 +55,7 @@ def home():
 
 
 @app.route("/stock/<stock_info_id>", methods=["GET", "POST"])
-def stock(stock_info_id):
+def stock_page(stock_info_id):
     stock_dic = mongo.db.stock_info.find_one({"_id": ObjectId(stock_info_id)})
     for key, value in stock_dic.items():
         # get the sort stock name from db
@@ -92,11 +92,21 @@ def stock(stock_info_id):
         else:
             add_info = {k: v}
             stock_info_second_part.update(add_info)
+    if request.method == "POST":
+        stock_bought = {
+            "stock_name_short": stock_name,
+            "stock_name": stock_title,
+            "bought_by": session["user"],
+            "stock_price": stock_price,
+            "stock_amount": request.form.get("stock_total")
+        }
+        mongo.db.stocks_bought.insert_one(stock_bought)
+
     return render_template(
         "stock.html", stock_info_first_part=stock_info_first_part,
         stock_info_second_part=stock_info_second_part, stock_price=stock_price,
         change_percent_price=change_percent_price, stock_title=stock_title,
-        max_amount=max_amount)
+        max_amount=max_amount, stock_dic=stock_dic)
 
 
 @app.route("/register", methods=["GET", "POST"])
