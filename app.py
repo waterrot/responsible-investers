@@ -51,7 +51,7 @@ mongo = PyMongo(app)
 def home():
     stock_name = "uber"
     yf2 = yf(stock_name)
-    #get the stock price
+    # get the stock price
     stock_price = round(si.get_live_price(stock_name), 2)
     # the market close price of a stock
     close_price = yf2.get_prev_close_price()
