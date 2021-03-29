@@ -92,21 +92,48 @@ def stock_page(stock_info_id):
         else:
             add_info = {k: v}
             stock_info_second_part.update(add_info)
+    # code to buy the stocks
     if request.method == "POST":
-        stock_bought = {
-            "stock_name_short": stock_name,
-            "stock_name": stock_title,
-            "bought_by": session["user"],
-            "stock_price": stock_price,
-            "stock_amount": request.form.get("stock_total")
-        }
-        mongo.db.stocks_bought.insert_one(stock_bought)
+        # if you allready have the stock this will happen
+        # the if statement is not good yet
+        if mongo.db.stock_bought.find(
+            {"bought_by": session["user"]}) == session[
+                "user"] and mongo.db.stock_bought.find(
+                {"stock_name_short": stock_name}) == stock_name:
+            # update the stock with this code
+            # also not sure about this one
+            mongo.db.stocks_bought.update(
+                {"bought_by": session["user"], "stock_name_short": stock_name},
+                {'$inc': {"stock_price": int(stock_price)*int(
+                    request.form.get("stock_total")), "stock_amount": int(
+                        request.form.get("stock_total"))}})
+            flash("you successfully bought the extra stocks")
+            return redirect(url_for("portfolio"))
+        # code to use when you don't have to stock
+        else:
+            stock_bought = {
+                        "stock_name_short": stock_name,
+                        "stock_name": stock_title,
+                        "bought_by": session["user"],
+                        "stock_price": stock_price*int(
+                            request.form.get("stock_total")),
+                        "stock_amount": int(request.form.get("stock_total"))
+                    }
+            mongo.db.stocks_bought.insert_one(stock_bought)
+            flash("you successfully bought the stocks")
+            return redirect(url_for("portfolio"))
 
     return render_template(
         "stock.html", stock_info_first_part=stock_info_first_part,
         stock_info_second_part=stock_info_second_part, stock_price=stock_price,
         change_percent_price=change_percent_price, stock_title=stock_title,
         max_amount=max_amount, stock_dic=stock_dic)
+
+
+@app.route("/portfolio")
+def portfolio():
+    stocks_bought = list(mongo.db.stocks_bought.find())
+    return render_template("portfolio.html", stocks_bought=stocks_bought)
 
 
 @app.route("/register", methods=["GET", "POST"])
