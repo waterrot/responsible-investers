@@ -2,7 +2,7 @@
 {% block content %}
     
     {% for stock in stocks %}
-        <a href="{{ url_for('stock', stock_info_id=stock._id) }}" class="btn light-blue lighten-1">
+        <a href="{{ url_for('stock_page', stock_info_id=stock._id) }}" class="btn light-blue lighten-1">
             {{ stock.stock_name }}
         </a><br>
     {% endfor %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+    
+    <table class="striped">
+        <thead>
+            <th>Name of the stock</th>
+            <th>Number of stocks</th>
+            <th>Av. Stock price</th>
+            <th>total profit</th>
+            <th>day profit</th>
+        </thead>
+        <tbody>
+            {% for stock_bought in stocks_bought %}
+                {% if session.user|lower == stock_bought.bought_by|lower %}
+                    <tr>
+                        <td>{{ stock_bought.stock_name }}</td>
+                        <td>{{ stock_bought.stock_amount }}</td>
+                        <td>{{ stock_bought.stock_price }}</td>
+                        <td>{{ stock_bought.stock_name }} </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
