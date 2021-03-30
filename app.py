@@ -60,7 +60,7 @@ def stock_page(stock_info_id):
     for key, value in stock_dic.items():
         # get the sort stock name from db
         if key == "stock_name_short":
-           stock_name = value
+            stock_name = value
         # get the whole stock name from db
         if key == "stock_name":
             stock_title = value
@@ -92,33 +92,39 @@ def stock_page(stock_info_id):
         else:
             add_info = {k: v}
             stock_info_second_part.update(add_info)
+
     # code to buy the stocks
     if request.method == "POST":
-        # if you allready have the stock this will happen
-        # the if statement is not good yet
-        if mongo.db.stock_bought.find(
-            {"bought_by": session["user"]}) == session[
-                "user"] and mongo.db.stock_bought.find(
-                {"stock_name_short": stock_name}) == stock_name:
-            # update the stock with this code
-            # also not sure about this one
-            mongo.db.stocks_bought.update(
-                {"bought_by": session["user"], "stock_name_short": stock_name},
-                {'$inc': {"stock_price": int(stock_price)*int(
-                    request.form.get("stock_total")), "stock_amount": int(
-                        request.form.get("stock_total"))}})
+
+        # define variables
+        # the criteria for when the stock is allready bought by the user
+        data_find = {'$and': [{
+            "bought_by": session["user"]},
+            {"stock_name_short": stock_name}]}
+        # get the number of stocks bought
+        get_stock_amount = int(request.form.get("stock_total"))
+        # get to purchase value of the stocks
+        price_change = stock_price * get_stock_amount
+
+        # if user already has the stock, exicute this if statement
+        # right now everything is going through this code
+        if mongo.db.stock_bought.find(data_find):
+            # update the new purchase to the db
+            mongo.db.stocks_bought.update(data_find, {'$inc': {
+                "stock_price": price_change,
+                "stock_amount": get_stock_amount}})
             flash("you successfully bought the extra stocks")
             return redirect(url_for("portfolio"))
+
         # code to use when you don't have to stock
         else:
             stock_bought = {
-                        "stock_name_short": stock_name,
-                        "stock_name": stock_title,
-                        "bought_by": session["user"],
-                        "stock_price": stock_price*int(
-                            request.form.get("stock_total")),
-                        "stock_amount": int(request.form.get("stock_total"))
-                    }
+                "stock_name_short": stock_name,
+                "stock_name": stock_title,
+                "bought_by": session["user"],
+                "stock_price": price_change,
+                "stock_amount": get_stock_amount
+            }
             mongo.db.stocks_bought.insert_one(stock_bought)
             flash("you successfully bought the stocks")
             return redirect(url_for("portfolio"))
