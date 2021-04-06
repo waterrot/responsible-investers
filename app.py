@@ -105,8 +105,7 @@ def stock_page(stock_info_id):
         price_change = stock_price * get_stock_amount
         # if user already has the stock, exicute this if statement
         # right now everything is going through this code
-        if mongo.db.stock_bought.find_one({"bought_by": session["user"],
-                                           "stock_name_short": stock_name}):
+        if mongo.db.stock_bought.find_one(data_find):
             # update the new purchase to the db
             mongo.db.stock_bought.update(data_find, {'$inc': {
                 "stock_price": price_change,
