@@ -129,7 +129,8 @@ def stock_page(stock_info_id):
         "stock.html", stock_info_first_part=stock_info_first_part,
         stock_info_second_part=stock_info_second_part, stock_price=stock_price,
         change_percent_price=change_percent_price, stock_title=stock_title,
-        max_amount=max_amount, stock_dic=stock_dic, stock_name=stock_name)
+        max_amount=max_amount, stock_dic=stock_dic, stock_name=stock_name,
+        cash_of_user=cash_of_user)
 
 
 @app.route("/portfolio")
