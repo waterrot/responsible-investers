@@ -25,3 +25,19 @@
 .sidenav li>a>i {
     margin: 0px;
 }
+
+.padding-card {
+    padding: 10px !important;
+}
+
+/* image styling */
+.image-card {
+    border-radius: 50% !important;
+    text-align: center;
+    padding: 5px 2px;
+}
+
+.div-of-image-card {
+    display: flex;
+    align-items: center;
+}

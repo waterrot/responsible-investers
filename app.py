@@ -95,29 +95,26 @@ def stock_page(stock_info_id):
 
     # code to buy the stocks
     if request.method == "POST":
-
         # define variables
         # the criteria for when the stock is allready bought by the user
-        data_find = {'$and': [{
-            "bought_by": session["user"]},
-            {"stock_name_short": stock_name}]}
+        data_find = {"bought_by": session["user"],
+                     "stock_name_short": stock_name}
         # get the number of stocks bought
         get_stock_amount = int(request.form.get("stock_total"))
         # get to purchase value of the stocks
         price_change = stock_price * get_stock_amount
-
         # if user already has the stock, exicute this if statement
         # right now everything is going through this code
-        if mongo.db.stock_bought.find(data_find):
+        if mongo.db.stock_bought.find_one({"bought_by": session["user"],
+                                           "stock_name_short": stock_name}):
             # update the new purchase to the db
-            mongo.db.stocks_bought.update(data_find, {'$inc': {
+            mongo.db.stock_bought.update(data_find, {'$inc': {
                 "stock_price": price_change,
                 "stock_amount": get_stock_amount}})
             flash("you successfully bought the extra stocks")
             return redirect(url_for("portfolio"))
-
-        # code to use when you don't have to stock
         else:
+            # code to use when you don't have to stock
             stock_bought = {
                 "stock_name_short": stock_name,
                 "stock_name": stock_title,
@@ -133,7 +130,7 @@ def stock_page(stock_info_id):
         "stock.html", stock_info_first_part=stock_info_first_part,
         stock_info_second_part=stock_info_second_part, stock_price=stock_price,
         change_percent_price=change_percent_price, stock_title=stock_title,
-        max_amount=max_amount, stock_dic=stock_dic)
+        max_amount=max_amount, stock_dic=stock_dic, stock_name=stock_name)
 
 
 @app.route("/portfolio")
