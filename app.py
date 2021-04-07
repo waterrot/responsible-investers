@@ -50,8 +50,11 @@ mongo = PyMongo(app)
 
 @app.route("/")
 def home():
-    stocks = list(mongo.db.stock_info.find())
-    return render_template("index.html", stocks=stocks)
+    stock_dic_info = mongo.db.stock_info.find()
+    stocks = list(stock_dic_info)
+
+    return render_template("index.html", stocks=stocks,
+        price_of_stocks=price_of_stocks, stock_dic_info=stock_dic_info)
 
 
 @app.route("/stock/<stock_info_id>", methods=["GET", "POST"])
@@ -105,9 +108,10 @@ def stock_page(stock_info_id):
         price_change = stock_price * get_stock_amount
         # if user already has the stock, exicute this if statement
         # right now everything is going through this code
-        if mongo.db.stock_bought.find_one(data_find):
+        # has_stock = mongo.db.stock_bought.find_one(data_find)
+        if mongo.db.stocks_bought.count_documents(data_find) == 1:
             # update the new purchase to the db
-            mongo.db.stock_bought.update(data_find, {'$inc': {
+            mongo.db.stocks_bought.update_one(data_find, {'$inc': {
                 "stock_price": price_change,
                 "stock_amount": get_stock_amount}})
             flash("you successfully bought the extra stocks")
@@ -129,8 +133,7 @@ def stock_page(stock_info_id):
         "stock.html", stock_info_first_part=stock_info_first_part,
         stock_info_second_part=stock_info_second_part, stock_price=stock_price,
         change_percent_price=change_percent_price, stock_title=stock_title,
-        max_amount=max_amount, stock_dic=stock_dic, stock_name=stock_name,
-        cash_of_user=cash_of_user)
+        max_amount=max_amount, stock_dic=stock_dic, stock_name=stock_name)
 
 
 @app.route("/portfolio")
