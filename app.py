@@ -54,7 +54,7 @@ def home():
     stocks = list(stock_dic_info)
 
     return render_template("index.html", stocks=stocks,
-        price_of_stocks=price_of_stocks, stock_dic_info=stock_dic_info)
+        stock_dic_info=stock_dic_info)
 
 
 @app.route("/stock/<stock_info_id>", methods=["GET", "POST"])
@@ -140,6 +140,12 @@ def stock_page(stock_info_id):
 def portfolio():
     stocks_bought = list(mongo.db.stocks_bought.find())
     return render_template("portfolio.html", stocks_bought=stocks_bought)
+
+@app.route("/sell_stocks/<stock_bought_id>")
+def sell_stocks(stock_bought_id):
+    mongo.db.stocks_bought.remove({"_id": ObjectId(stock_bought_id)})
+    flash("Stocks Successfully sold")
+    return redirect(url_for("portfolio"))
 
 
 @app.route("/register", methods=["GET", "POST"])

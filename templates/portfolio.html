@@ -3,11 +3,12 @@
     
     <table class="striped">
         <thead>
-            <th>Name of the stock</th>
-            <th>Number of stocks</th>
-            <th>Av. Stock price</th>
-            <th>total profit</th>
-            <th>day profit</th>
+            <th>Name of the Stock:</th>
+            <th>Stocks bought:</th>
+            <th>Total Stocks Price:</th>
+            <th>Avg. Stock Price:</th>
+            <th>Profit/Lost:</th>
+            <th>Action:</th>
         </thead>
         <tbody>
             {% for stock_bought in stocks_bought %}
@@ -15,10 +16,10 @@
                     <tr>
                         <td>{{ stock_bought.stock_name }}</td>
                         <td>{{ stock_bought.stock_amount }}</td>
-                        <td>{{ stock_bought.stock_price }}</td>
-                        <td>{{ stock_bought.stock_name }} </td>
+                        <td>${{ stock_bought.stock_price }}</td>
                         <td></td>
                         <td></td>
+                        <td><a href="{{ url_for('sell_stocks', stock_bought_id=stock_bought._id) }}" class="btn-small red">sell</a></td>
                     </tr>
                 {% endif %}
             {% endfor %}
