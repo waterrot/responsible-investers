@@ -20,14 +20,16 @@
                         <td></td>
                         <td></td>
                         <td>
-                            <form Action="POST">
+                            <form method="POST" action="{{ url_for('sell_stocks', stocks_bought_id=stock_bought._id) }}">
                                 <div class="row margin-0">
                                     <div class="input-field col s4 margin-0">
-                                        <label for="stock_total">quantity</label>
-                                        <input type="number" name="stock_total" id="stock_total" min="0" max="{{ max_amount }}" required />
+                                        <label for="stocks_sell">quantity</label>
+                                        <input type="number" name="stocks_sell" id="stocks_sell" min="0" max="10" required />
                                     </div>
                                     <div class="input-field col s3 margin-0">
-                                        <a href="{{ url_for('sell_stocks', stock_bought_id=stock_bought._id) }}" class="btn red">sell</a>
+                                        <button type="submit" class="btn red">
+                                            Sell
+                                        </button>
                                     </div>
                                 </div>
                             </form>

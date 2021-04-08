@@ -142,10 +142,27 @@ def portfolio():
     return render_template("portfolio.html", stocks_bought=stocks_bought)
 
 
-@app.route("/sell_stocks/<stock_bought_id>")
-def sell_stocks(stock_bought_id):
-    mongo.db.stocks_bought.remove({"_id": ObjectId(stock_bought_id)})
-    flash("Stocks Successfully sold")
+@app.route("/sell/<stocks_bought_id>", methods=["POST"])
+def sell_stocks(stocks_bought_id):
+    # find the stock the user wants to sell
+    stock_dic = mongo.db.stocks_bought.find_one(
+        {"_id": ObjectId(stocks_bought_id)})
+    for key, value in stock_dic.items():
+        # get the short stock name from db
+        if key == "stock_name_short":
+            stock_name = value
+
+    # get the amount of stocks user wants to sell
+    stocks_sell_amount = int(request.form.get("stocks_sell"))
+    # get the live stock price
+    stock_price_live = round(si.get_live_price(stock_name), 2)
+    # get the sell price of all stocks
+    stock_sell_price = stocks_sell_amount * stock_price_live
+
+    # sell the stocks
+    mongo.db.stocks_bought.update_one(stock_dic, {'$inc': {
+        "stock_price": -stock_sell_price,
+        "stock_amount": -stocks_sell_amount}})
     return redirect(url_for("portfolio"))
 
 
