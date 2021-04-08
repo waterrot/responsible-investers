@@ -105,7 +105,7 @@ def stock_page(stock_info_id):
         # get the number of stocks bought
         get_stock_amount = int(request.form.get("stock_total"))
         # get to purchase value of the stocks
-        price_change = stock_price * get_stock_amount
+        price_change = round(stock_price * get_stock_amount, 2)
         # if user already has the stock, exicute this if statement
         # right now everything is going through this code
         # has_stock = mongo.db.stock_bought.find_one(data_find)
@@ -114,7 +114,8 @@ def stock_page(stock_info_id):
             mongo.db.stocks_bought.update_one(data_find, {'$inc': {
                 "stock_price": price_change,
                 "stock_amount": get_stock_amount}})
-            flash("you successfully bought the extra stocks")
+            flash(f"You successfully bought {get_stock_amount} {stock_name} " +
+                  f"stocks for ${price_change}")
             return redirect(url_for("portfolio"))
         else:
             # code to use when you don't have to stock
@@ -126,7 +127,8 @@ def stock_page(stock_info_id):
                 "stock_amount": get_stock_amount
             }
             mongo.db.stocks_bought.insert_one(stock_bought)
-            flash("you successfully bought the stocks")
+            flash(f"You successfully bought {get_stock_amount} {stock_name} " +
+                  f"stocks for ${price_change}")
             return redirect(url_for("portfolio"))
 
     return render_template(
@@ -168,11 +170,11 @@ def sell_stocks(stocks_bought_id):
     no_stocks = {"_id": ObjectId(stocks_bought_id), "stock_amount": 0}
     if mongo.db.stocks_bought.count_documents(no_stocks) == 1:
         mongo.db.stocks_bought.remove({"_id": ObjectId(stocks_bought_id)})
-        flash(f"you successfully sold {stocks_sell_amount} {stock_name} " +
+        flash(f"You successfully sold {stocks_sell_amount} {stock_name} " +
               f"stocks for ${stock_sell_price}")
         return redirect(url_for("portfolio"))
     else:
-        flash(f"you successfully sold {stocks_sell_amount} {stock_name} " +
+        flash(f"You successfully sold {stocks_sell_amount} {stock_name} " +
               f"stocks for ${stock_sell_price}")
         return redirect(url_for("portfolio"))
 
