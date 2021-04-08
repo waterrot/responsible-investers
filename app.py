@@ -53,8 +53,8 @@ def home():
     stock_dic_info = mongo.db.stock_info.find()
     stocks = list(stock_dic_info)
 
-    return render_template("index.html", stocks=stocks,
-        stock_dic_info=stock_dic_info)
+    return render_template(
+        "index.html", stocks=stocks, stock_dic_info=stock_dic_info)
 
 
 @app.route("/stock/<stock_info_id>", methods=["GET", "POST"])
@@ -141,6 +141,7 @@ def portfolio():
     stocks_bought = list(mongo.db.stocks_bought.find())
     return render_template("portfolio.html", stocks_bought=stocks_bought)
 
+
 @app.route("/sell_stocks/<stock_bought_id>")
 def sell_stocks(stock_bought_id):
     mongo.db.stocks_bought.remove({"_id": ObjectId(stock_bought_id)})
@@ -152,20 +153,20 @@ def sell_stocks(stock_bought_id):
 def register():
     if request.method == "POST":
         # check if the username is valide
-        if request.form.get("username") == "" or not check_username(
-           request.form.get("username").lower()):
+        request_user = request.form.get("username")
+        if request_user == "" or not check_username(request_user.lower()):
             flash(
                 "Username is not valide. Use between 5-15 character" +
                 " and only letters and numbers.")
             return redirect(url_for("register"))
         # check if the email is valide
-        if request.form.get("email") == "" or not check_email(
-           request.form.get("email").lower()):
+        request_mail = request.form.get("email")
+        if request_mail == "" or not check_email(request_mail.lower()):
             flash("Please fill in a valid email address.")
             return redirect(url_for("register"))
         # check if the password is valide
-        if request.form.get("password") == "" or not check_pw(
-           request.form.get("password")):
+        request_pw = request.form.get("password")
+        if request_pw == "" or not check_pw(request_pw):
             flash(
                 "Password is not valid. use between the 5-15 " +
                 "characters")
@@ -210,13 +211,13 @@ def register():
 def login():
     if request.method == "POST":
         # check if the email is valide
-        if request.form.get("email") == "" or not check_email(
-           request.form.get("email").lower()):
+        request_mail = request.form.get("email")
+        if request_mail == "" or not check_email(request_mail.lower()):
             flash("Please fill in a valid email address.")
             return redirect(url_for("login"))
         # check if the password is valide
-        if request.form.get("password") == "" or not check_pw(
-           request.form.get("password")):
+        request_pw = request.form.get("password")
+        if request_pw == "" or not check_pw(request_pw):
             flash(
                 "Password is not valid. use between the 5-15 " +
                 "characters")
@@ -229,17 +230,13 @@ def login():
 
         if existing_user:
             # ensure hashed password matches user input
-            if check_password_hash(
-                 existing_user["password"], request.form.get("password")):
+            if check_password_hash(existing_user["password"], request_pw):
                 # if the password and email do match then
                 # put the usersname into session cookie
-                session["user"] = existing_user[
-                    "username"].lower()
+                session["user"] = existing_user["username"].lower()
                 # display a welcome message to the user
-                flash("Welcome, {}".format(
-                    existing_user["username"].lower()))
-                return redirect(url_for(
-                    "home", username=session["user"]))
+                flash("Welcome, {}".format(existing_user["username"].lower()))
+                return redirect(url_for("home", username=session["user"]))
             else:
                 # invalid password match
                 flash("Incorrect Email and/or Password")
