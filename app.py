@@ -163,7 +163,18 @@ def sell_stocks(stocks_bought_id):
     mongo.db.stocks_bought.update_one(stock_dic, {'$inc': {
         "stock_price": -stock_sell_price,
         "stock_amount": -stocks_sell_amount}})
-    return redirect(url_for("portfolio"))
+
+    # check if the stock file has no more stocks
+    no_stocks = {"_id": ObjectId(stocks_bought_id), "stock_amount": 0}
+    if mongo.db.stocks_bought.count_documents(no_stocks) == 1:
+        mongo.db.stocks_bought.remove({"_id": ObjectId(stocks_bought_id)})
+        flash(f"you successfully sold {stocks_sell_amount} {stock_name} " +
+              f"stocks for ${stock_sell_price}")
+        return redirect(url_for("portfolio"))
+    else:
+        flash(f"you successfully sold {stocks_sell_amount} {stock_name} " +
+              f"stocks for ${stock_sell_price}")
+        return redirect(url_for("portfolio"))
 
 
 @app.route("/register", methods=["GET", "POST"])

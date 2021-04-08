@@ -24,7 +24,7 @@
                                 <div class="row margin-0">
                                     <div class="input-field col s4 margin-0">
                                         <label for="stocks_sell">quantity</label>
-                                        <input type="number" name="stocks_sell" id="stocks_sell" min="0" max="10" required />
+                                        <input type="number" name="stocks_sell" id="stocks_sell" min="0" max="{{ stock_bought.stock_amount }}" required />
                                     </div>
                                     <div class="input-field col s3 margin-0">
                                         <button type="submit" class="btn red">
