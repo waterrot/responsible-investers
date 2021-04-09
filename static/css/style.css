@@ -18,6 +18,10 @@ main {
     text-shadow: 2px 2px 2px rgba(0 ,0 , 0, 0.5);
 }
 
+.text-green {
+    color: #00c853;
+}
+
 /* Button styling */
 .btn-green{
     background-color: #00c853;
@@ -54,4 +58,23 @@ main {
 .div-of-image-card {
     display: flex;
     align-items: center;
+}
+
+/* footer styling */
+footer a {
+    color: #bdbdbd;
+    transition: all 0.25s ease-in-out;
+}
+
+footer a:hover {
+    color: #757575;
+}
+
+footer a i {
+    color: #ffffff;
+    transition: all 0.25s ease-in-out;
+}
+
+footer a i:hover {
+    color: #9e9e9e;
 }

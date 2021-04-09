@@ -76,27 +76,42 @@
 
     <footer class="page-footer grey darken-3">
         <div class="container">
-        <div class="row">
-            <div class="col l6 s12">
-            <h5 class="white-text">Footer Content</h5>
-            <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">Footer Content</h5>
+                    <ul>
+                        <li><a href="{{ url_for('home') }}">Home</a></li>
+                        <li><a href="#">Search</a></li>
+                        {% if session.user %}
+                            <li><a href="{{ url_for('portfolio') }}">Portfolio</a></li>
+                        {% endif %}
+                        {% if session.user %}
+                            <li><a href="{{ url_for('logout') }}">logout</a></li>
+                        {% else %}
+                            <li><a href="{{ url_for('login') }}">login</a></li>
+                            <li><a class="btn btn-green" href="{{ url_for('register') }}">register</a></li>
+                        {% endif %}
+                    </ul>  
+                </div>
+                <div class="col l4 offset-l2 s12">
+                    <h5 class="white-text">Contact information:</h5>
+                    <p>email: <a href="mailto:oudloosdrecht@gmail.com?SUBJECT=Reaction">oudloosdrecht@gmail.com</a></p>
+                    <p>Phone: <a href="tel:0031620521519">(+31) 6 205 215 19</a></p>
+                    <ul>
+                        <!--icon link to facebook page-->
+                        <li>
+                            <a target="_blank" href="https://www.facebook.com">
+                                <i class="fab fa-facebook fa-3x" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div class="col l4 offset-l2 s12">
-            <h5 class="white-text">Links</h5>
-            <ul>
-                <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
-                <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
-                <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
-                <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
-            </ul>
-            </div>
-        </div>
         </div>
         <div class="footer-copyright">
-        <div class="container">
-        © 2014 Copyright Text
-        <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
-        </div>
+            <div class="container">
+                © 2021 Copyright Text
+            </div>
         </div>
     </footer>
 
