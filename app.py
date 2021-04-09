@@ -102,18 +102,24 @@ def stock_page(stock_info_id):
         # the criteria for when the stock is allready bought by the user
         data_find = {"bought_by": session["user"],
                      "stock_name_short": stock_name}
+        # the criteria to extract the price of the stock
+        # of the users free cashflow
+        user_of_db = {"username": session["user"]}
         # get the number of stocks bought
         get_stock_amount = int(request.form.get("stock_total"))
         # get to purchase value of the stocks
         price_change = round(stock_price * get_stock_amount, 2)
-        # if user already has the stock, exicute this if statement
-        # right now everything is going through this code
-        # has_stock = mongo.db.stock_bought.find_one(data_find)
+
+        # if user already has the stock, execute this if statement
         if mongo.db.stocks_bought.count_documents(data_find) == 1:
             # update the new purchase to the db
             mongo.db.stocks_bought.update_one(data_find, {'$inc': {
                 "stock_price": price_change,
                 "stock_amount": get_stock_amount}})
+            # extract the stock buy price of the free cash of user
+            mongo.db.users.update_one(user_of_db, {'$inc': {
+                "cash": -price_change}})
+
             flash(f"You successfully bought {get_stock_amount} {stock_name} " +
                   f"stocks for ${price_change}")
             return redirect(url_for("portfolio"))
@@ -126,7 +132,13 @@ def stock_page(stock_info_id):
                 "stock_price": price_change,
                 "stock_amount": get_stock_amount
             }
+            # add new stock to database
             mongo.db.stocks_bought.insert_one(stock_bought)
+
+            # extract the stock buy price of the free cash of user
+            mongo.db.users.update_one(user_of_db, {'$inc': {
+                "cash": -price_change}})
+
             flash(f"You successfully bought {get_stock_amount} {stock_name} " +
                   f"stocks for ${price_change}")
             return redirect(url_for("portfolio"))
@@ -165,6 +177,13 @@ def sell_stocks(stocks_bought_id):
     mongo.db.stocks_bought.update_one(stock_dic, {'$inc': {
         "stock_price": -stock_sell_price,
         "stock_amount": -stocks_sell_amount}})
+
+    # the criteria to extract the price of the stock
+    # of the users free cashflow
+    user_of_db = {"username": session["user"]}
+    # extract the stock buy price of the free cash of user
+    mongo.db.users.update_one(user_of_db, {'$inc': {
+        "cash": stock_sell_price}})
 
     # check if the stock file has no more stocks
     no_stocks = {"_id": ObjectId(stocks_bought_id), "stock_amount": 0}
