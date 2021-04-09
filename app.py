@@ -105,10 +105,15 @@ def stock_page(stock_info_id):
         # the criteria to extract the price of the stock
         # of the users free cashflow
         user_of_db = {"username": session["user"]}
+        # the criteria to find the user 'admin'
+        user_is_admin = {"username": "admin"}
         # get the number of stocks bought
         get_stock_amount = int(request.form.get("stock_total"))
-        # get to purchase value of the stocks
+        # get to purchase value of the stocks excl fee
         price_change = round(stock_price * get_stock_amount, 2)
+        # get amount spend on fee by purchasing a stock
+        spend_on_fee = round(0.5 + (0.003 * price_change), 2)
+        total_spend_stock = round(price_change + spend_on_fee, 2)
 
         # if user already has the stock, execute this if statement
         if mongo.db.stocks_bought.count_documents(data_find) == 1:
@@ -116,9 +121,15 @@ def stock_page(stock_info_id):
             mongo.db.stocks_bought.update_one(data_find, {'$inc': {
                 "stock_price": price_change,
                 "stock_amount": get_stock_amount}})
-            # extract the stock buy price of the free cash of user
+            # extract the stock buy price of the free cash of user and
+            # add the cash spend on fee to the total spend on fees
             mongo.db.users.update_one(user_of_db, {'$inc': {
-                "cash": -price_change}})
+                "cash": -total_spend_stock,
+                "total_spend_fees": spend_on_fee}})
+            # add the fee value to the admin profile to see
+            # how much the website has made so far
+            mongo.db.users.update_one(user_is_admin, {'$inc': {
+                "total_income_business": spend_on_fee}})
 
             flash(f"You successfully bought {get_stock_amount} {stock_name} " +
                   f"stocks for ${price_change}")
@@ -135,9 +146,16 @@ def stock_page(stock_info_id):
             # add new stock to database
             mongo.db.stocks_bought.insert_one(stock_bought)
 
-            # extract the stock buy price of the free cash of user
+            # extract the stock buy price of the free cash of user and
+            # add the cash spend on fee to the total spend on fees
             mongo.db.users.update_one(user_of_db, {'$inc': {
-                "cash": -price_change}})
+                "cash": -total_spend_stock,
+                "total_spend_fees": spend_on_fee}})
+
+            # add the fee value to the admin profile to see
+            # how much the website has made so far
+            mongo.db.users.update_one(user_is_admin, {'$inc': {
+                "total_income_business": spend_on_fee}})
 
             flash(f"You successfully bought {get_stock_amount} {stock_name} " +
                   f"stocks for ${price_change}")
@@ -169,9 +187,9 @@ def sell_stocks(stocks_bought_id):
     # get the amount of stocks user wants to sell
     stocks_sell_amount = int(request.form.get("stocks_sell"))
     # get the live stock price
-    stock_price_live = round(si.get_live_price(stock_name), 2)
+    stock_price_live = si.get_live_price(stock_name)
     # get the sell price of all stocks
-    stock_sell_price = stocks_sell_amount * stock_price_live
+    stock_sell_price = round(stocks_sell_amount * stock_price_live, 2)
 
     # sell the stocks
     mongo.db.stocks_bought.update_one(stock_dic, {'$inc': {
@@ -244,7 +262,8 @@ def register():
             "username": request.form.get("username").lower(),
             "email": request.form.get("email").lower(),
             "password": generate_password_hash(request.form.get("password")),
-            "cash": 100000
+            "cash": 100000,
+            "total_spend_fees": 0
         }
         # push the data from the form to the db
         mongo.db.users.insert_one(register)
