@@ -1,5 +1,6 @@
 $(document).ready(function(){
     $('.sidenav').sidenav({edge: "right"});
+    $('.collapsible').collapsible();
   });
 
 /* code to multiply the quantity with the stock price */

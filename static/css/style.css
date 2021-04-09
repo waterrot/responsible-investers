@@ -17,6 +17,10 @@ main {
     min-height: 70vh;
 }
 
+.no-border {
+    border: 0px;
+}
+
 /* text styling */
 .text-shadow {
     text-shadow: 2px 2px 2px rgba(0 ,0 , 0, 0.5);
@@ -50,6 +54,14 @@ main {
 
 .margin-0 {
     margin: 0px !important;
+}
+
+.padding-0 {
+    padding: 0px !important;
+}
+
+.no-left {
+    left: 0px !important;
 }
 
 /* image styling */
