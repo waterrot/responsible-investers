@@ -72,6 +72,7 @@
                 {% endif %}
             {% endfor %}
         </div>
+        <br>
 
         <!-- the row with the big tech stocks -->
         <div class="row">
@@ -99,6 +100,35 @@
                 {% endif %}
             {% endfor %}
         </div>
+        <br>
+
+        <!-- the row with the 3-d printing stocks -->
+        <div class="row">
+            <h5 class="center"><b>3-D printing companies stocks:</b></h5>
+            {% for stock in stocks %}
+                {% if stock.category == "3d-printing" %}
+                    <div class="col s12 m8 l4 offset-m2">
+                        <div class="card horizontal min-height-card">
+                            <div class="card-image col s5 div-of-image-card">
+                                <img src="{{ stock.photo_link }}" class="image-card">
+                            </div>
+                            <div class="card-stacked">
+                                <div class="card-content padding-card">
+                                    <h6><b>{{ stock.stock_name }}</b></h6>
+                                    <p>{{ stock.description_short }}</p>
+                                </div>
+                                <div class="card-action padding-card">
+                                    <a href="{{ url_for('stock_page', stock_info_id=stock._id) }}" class="btn btn-green">
+                                        read more
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
     {% endif %}
+    <br><br>
 
 {% endblock %}
