@@ -211,7 +211,7 @@ def portfolio():
         user_email=user_email, send_on_fees=send_on_fees)
 
 
-@app.route("/profile")
+@app.route("/profile", methods=["GET", "POST"])
 def profile():
     # get the amount of free cash of the user
     cash_of_user_unrounded = mongo.db.users.find_one(
@@ -223,6 +223,55 @@ def profile():
     # get the total spend amount of cash on fees
     send_on_fees = mongo.db.users.find_one(
         {"username": session["user"]})["total_spend_fees"]
+
+    if request.method == "POST":
+        # check if the username is valide
+        request_user = request.form.get("username")
+        if request_user == "" or not check_username(request_user.lower()):
+            flash(
+                "Username is not valide. Use between 5-15 character" +
+                " and only letters and numbers.")
+            return redirect(url_for("profile"))
+        # check if the email is valide
+        request_mail = request.form.get("email")
+        if request_mail == "" or not check_email(request_mail.lower()):
+            flash("Please fill in a valid email address.")
+            return redirect(url_for("profile"))
+
+        # make variable to check if email address exists in db
+        existing_email = mongo.db.users.find_one(
+            {"email": request.form.get("email").lower()})
+
+        # make variable to check if username address exists in db
+        existing_user = mongo.db.users.find_one(
+            {"username": request.form.get("username").lower()})
+
+        # check if username/email has been changed
+        if request_user == session['user'] and request_mail == user_email:
+            flash("You did not change anything.")
+            return redirect(url_for("profile"))
+        # check if user exists in db
+        elif request_user == existing_user and request_user != session['user']:
+            flash("Username already exists.")
+            return redirect(url_for("profile"))
+        # check if email exists in db
+        elif request_mail == existing_email and request_mail != user_email:
+            flash("Email in allready in use.")
+            return redirect(url_for("profile"))
+
+        # put the data from the form in a variable
+        edit_profile = {
+            "username": request.form.get("username").lower(),
+            "email": request.form.get("email").lower(),
+        }
+        # push the data from the form to the db
+        mongo.db.users.update_one(
+            {"username": session["user"]}, {'$set': edit_profile})
+
+        # put the new user into 'session' cookie
+        session["user"] = request.form.get("username").lower()
+        flash("Profile successfully edited!")
+        return redirect(url_for("profile", username=session["user"]))
 
     return render_template(
         "profile.html", cash_of_user=cash_of_user,
