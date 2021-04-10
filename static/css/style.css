@@ -48,6 +48,10 @@ main {
     margin-left: 15px;
 }
 
+.mr-1 {
+    margin-right: 10px;
+}
+
 .sidenav li>a>i {
     margin: 0px;
 }

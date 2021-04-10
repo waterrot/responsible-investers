@@ -30,8 +30,7 @@
                 <a href="{{ url_for('home') }}" class="brand-logo ml-2">RI</a>
                 <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="fas fa-bars"></i></a>
                 <ul class="right hide-on-med-and-down">
-                    <li><a href="#"><i class="fas fa-search"></i></a></li>
-                    <li><a href="{{ url_for('home') }}">Home</a></li>
+                    <li><a href="{{ url_for('home') }}"><i class="fas fa-home mr-1"></i>Home</a></li>
                     {% if session.user %}
                         <!-- profile dropdown -->
                         <li>
@@ -50,14 +49,13 @@
         <!-- mobile navbar -->
         <ul class="sidenav" id="mobile-demo">
             <li><h5 class="center-align blue-text text-darken-1">Responsible Investors</h5></li>
-            <li><a href="#"><i class="fas fa-search"></i>Search</a></li>
-            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('home') }}"><i class="fas fa-home"></i>Home</a></li>
             {% if session.user %}
-                <li><a href="{{ url_for('profile') }}">Profile</a></li>
-                <li><a href="{{ url_for('portfolio') }}">Portfolio</a></li>
-                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                <li><a href="{{ url_for('profile') }}"><i class="far fa-user"></i>Profile</a></li>
+                <li><a href="{{ url_for('portfolio') }}"><i class="fas fa-wallet"></i> Portfolio</a></li>
+                <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
             {% else %}
-                <li><a href="{{ url_for('login') }}">Login</a></li>
+                <li><a href="{{ url_for('login') }}"><i class="fas fa-sign-in-alt"></i>Login</a></li>
                 <li><a class="btn btn-green" href="{{ url_for('register') }}">Register</a></li>
             {% endif %}
         </ul>
@@ -88,7 +86,6 @@
                     <h5 class="white-text">Content pages:</h5>
                     <ul>
                         <li><a href="{{ url_for('home') }}">Home</a></li>
-                        <li><a href="#">Search</a></li>
                         {% if session.user %}
                             <li><a href="{{ url_for('profile') }}">Profile</a></li>
                             <li><a href="{{ url_for('portfolio') }}">Portfolio</a></li>
