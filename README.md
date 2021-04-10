@@ -1,4 +1,4 @@
-![Ultimate Piccalo: the game logo](assets/images/logo.png)
+![Responsible Investors](static/images/logo_ri_big.png)
 
 ## Table of Contents
 
@@ -29,15 +29,15 @@
 
 ## Description
 
-"Ultimate Piccalo: The Game" is a drinking game that friends and/or family can use when they want to have a lovely night. The game asks for the names of the people who want to play and it then give these players randomly a question or task he or she has to compleet. These questions involve drinking so remember to drink responsible! Next to the game there is also an option to donate to the creator in the form of beers.
+"Responsible Investors is a online broker platform where people can make an account and buy and trade in responsible stocks. The 12 stocks selected for the site are mostly companies who are working on making our planet a better place. Every user gets $10000 (fake) dollars to trade with. Every user pays a small fee ($0.50 + 0,3%) for every trade they make, with this money we from Responsible Investors can keep updating our platform" 
 
-![responsive site](assets/images/readme/piccalo-responsive.png)
+![responsive site](static/images/site_view_on_different_screens.jpg)
 
 ---
 
 ## Deployment and Live Demo
 
-The game can be used locally by cloning or downloading the repository from [github](https://github.com/waterrot/Ultimate-Piccolo-The-Game).
+The game can be used locally by cloning or downloading the repository from [github](https://github.com/waterrot/responsible-investors).
 
 ### Download
 

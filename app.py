@@ -35,7 +35,7 @@ def check_username(name):
 def check_pw(password):
     # check if the password is valide
     # allow all characters with a max length of 5-20
-    regex = "/^([0-9][0-9][0-9]{0,2}|[0-9]|10000)$"
+    regex = "^.{5,20}$"
     return re.match(regex, password)
 
 
@@ -96,8 +96,8 @@ def register():
         request_pw = request.form.get("password")
         if request_pw == "" or not check_pw(request_pw):
             flash(
-                "Password is not valid. use between the 5-15 " +
-                "characters")
+                "Password is not valid. Use between the 5-15 " +
+                "characters.")
             return redirect(url_for("register"))
 
         # make variable to check if email address exists in db
