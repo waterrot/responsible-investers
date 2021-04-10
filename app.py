@@ -77,6 +77,184 @@ def home():
         "index.html", stocks=stocks, stock_dic_info=stock_dic_info)
 
 
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        # check if the username is valide
+        request_user = request.form.get("username")
+        if request_user == "" or not check_username(request_user.lower()):
+            flash(
+                "Username is not valide. Use between 5-15 character" +
+                " and only letters and numbers.")
+            return redirect(url_for("register"))
+        # check if the email is valide
+        request_mail = request.form.get("email")
+        if request_mail == "" or not check_email(request_mail.lower()):
+            flash("Please fill in a valid email address.")
+            return redirect(url_for("register"))
+        # check if the password is valide
+        request_pw = request.form.get("password")
+        if request_pw == "" or not check_pw(request_pw):
+            flash(
+                "Password is not valid. use between the 5-15 " +
+                "characters")
+            return redirect(url_for("register"))
+
+        # make variable to check if email address exists in db
+        existing_email = mongo.db.users.find_one(
+            {"email": request.form.get("email").lower()})
+
+        # make variable to check if username address exists in db
+        existing_user = mongo.db.users.find_one(
+            {"username": request.form.get("username").lower()})
+
+        # check if username already exists in db
+        if existing_user:
+            flash("Username already exists")
+            return redirect(url_for("register"))
+
+        # check if email already exists in db
+        if existing_email:
+            flash("Email already exists")
+            return redirect(url_for("register"))
+
+        # put the data from the form in a variable
+        register = {
+            "username": request.form.get("username").lower(),
+            "email": request.form.get("email").lower(),
+            "password": generate_password_hash(request.form.get("password")),
+            "cash": 10000,
+            "total_spend_fees": 0
+        }
+        # push the data from the form to the db
+        mongo.db.users.insert_one(register)
+
+        # put the new user into 'session' cookie
+        session["user"] = request.form.get("username").lower()
+        flash("Registration Successful!")
+        return redirect(url_for("home", username=session["user"]))
+    return render_template("register.html")
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        # check if the email is valide
+        request_mail = request.form.get("email")
+        if request_mail == "" or not check_email(request_mail.lower()):
+            flash("Please fill in a valid email address.")
+            return redirect(url_for("login"))
+        # check if the password is valide
+        request_pw = request.form.get("password")
+        if request_pw == "" or not check_pw(request_pw):
+            flash(
+                "Password is not valid. use between the 5-15 " +
+                "characters")
+            return redirect(url_for("login"))
+
+        # make variable to check if user exists in db
+        # by using the email address
+        existing_user = mongo.db.users.find_one(
+            {"email": request.form.get("email").lower()})
+
+        if existing_user:
+            # ensure hashed password matches user input
+            if check_password_hash(existing_user["password"], request_pw):
+                # if the password and email do match then
+                # put the usersname into session cookie
+                session["user"] = existing_user["username"].lower()
+                # display a welcome message to the user
+                flash("Welcome, {}".format(existing_user["username"].lower()))
+                return redirect(url_for("home", username=session["user"]))
+            else:
+                # invalid password match
+                flash("Incorrect Email and/or Password")
+                return redirect(url_for("login"))
+        else:
+            # email doesn't exist
+            flash("Incorrect Email and/or Password")
+            return redirect(url_for("login"))
+    return render_template("login.html")
+
+
+@app.route("/logout")
+def logout():
+    # remove user from session cookies
+    flash("You have been logged out")
+    session.pop("user")
+    return redirect(url_for("login"))
+
+
+@app.route("/profile", methods=["GET", "POST"])
+def profile():
+    # get the amount of free cash of the user
+    cash_of_user_unrounded = mongo.db.users.find_one(
+        {"username": session["user"]})["cash"]
+    cash_of_user = round(cash_of_user_unrounded, 2)
+    # get the email adres of the user
+    user_email = mongo.db.users.find_one(
+        {"username": session["user"]})["email"]
+    # get the total spend amount of cash on fees
+    send_on_fees = round(mongo.db.users.find_one(
+        {"username": session["user"]})["total_spend_fees"], 2)
+    # get the total amount the business made by fees
+    made_money = round(mongo.db.users.find_one(
+        {"username": "admin"})["total_income_business"], 2)
+
+    if request.method == "POST":
+        # check if the username is valide
+        request_user = request.form.get("username")
+        if request_user == "" or not check_username(request_user.lower()):
+            flash(
+                "Username is not valide. Use between 5-15 character" +
+                " and only letters and numbers.")
+            return redirect(url_for("profile"))
+        # check if the email is valide
+        request_mail = request.form.get("email")
+        if request_mail == "" or not check_email(request_mail.lower()):
+            flash("Please fill in a valid email address.")
+            return redirect(url_for("profile"))
+
+        # make variable to check if email address exists in db
+        existing_email = mongo.db.users.find_one(
+            {"email": request.form.get("email").lower()})
+
+        # make variable to check if username address exists in db
+        existing_user = mongo.db.users.find_one(
+            {"username": request.form.get("username").lower()})
+
+        # check if username/email has been changed
+        if request_user == session['user'] and request_mail == user_email:
+            flash("You did not change anything.")
+            return redirect(url_for("profile"))
+        # check if user exists in db
+        elif request_user == existing_user and request_user != session['user']:
+            flash("Username already exists.")
+            return redirect(url_for("profile"))
+        # check if email exists in db
+        elif request_mail == existing_email and request_mail != user_email:
+            flash("Email in allready in use.")
+            return redirect(url_for("profile"))
+
+        # put the data from the form in a variable
+        edit_profile = {
+            "username": request.form.get("username").lower(),
+            "email": request.form.get("email").lower(),
+        }
+        # push the data from the form to the db
+        mongo.db.users.update_one(
+            {"username": session["user"]}, {'$set': edit_profile})
+
+        # put the new user into 'session' cookie
+        session["user"] = request.form.get("username").lower()
+        flash("Profile successfully edited!")
+        return redirect(url_for("profile", username=session["user"]))
+
+    return render_template(
+        "profile.html", cash_of_user=cash_of_user, made_money=made_money,
+        user_email=user_email, send_on_fees=send_on_fees)
+
+
 @app.route("/stock/<stock_info_id>", methods=["GET", "POST"])
 def stock_page(stock_info_id):
     stock_dic = mongo.db.stock_info.find_one({"_id": ObjectId(stock_info_id)})
@@ -266,76 +444,6 @@ def portfolio():
         user_email=user_email, send_on_fees=send_on_fees)
 
 
-@app.route("/profile", methods=["GET", "POST"])
-def profile():
-    # get the amount of free cash of the user
-    cash_of_user_unrounded = mongo.db.users.find_one(
-        {"username": session["user"]})["cash"]
-    cash_of_user = round(cash_of_user_unrounded, 2)
-    # get the email adres of the user
-    user_email = mongo.db.users.find_one(
-        {"username": session["user"]})["email"]
-    # get the total spend amount of cash on fees
-    send_on_fees = round(mongo.db.users.find_one(
-        {"username": session["user"]})["total_spend_fees"], 2)
-    # get the total amount the business made by fees
-    made_money = round(mongo.db.users.find_one(
-        {"username": "admin"})["total_income_business"], 2)
-
-    if request.method == "POST":
-        # check if the username is valide
-        request_user = request.form.get("username")
-        if request_user == "" or not check_username(request_user.lower()):
-            flash(
-                "Username is not valide. Use between 5-15 character" +
-                " and only letters and numbers.")
-            return redirect(url_for("profile"))
-        # check if the email is valide
-        request_mail = request.form.get("email")
-        if request_mail == "" or not check_email(request_mail.lower()):
-            flash("Please fill in a valid email address.")
-            return redirect(url_for("profile"))
-
-        # make variable to check if email address exists in db
-        existing_email = mongo.db.users.find_one(
-            {"email": request.form.get("email").lower()})
-
-        # make variable to check if username address exists in db
-        existing_user = mongo.db.users.find_one(
-            {"username": request.form.get("username").lower()})
-
-        # check if username/email has been changed
-        if request_user == session['user'] and request_mail == user_email:
-            flash("You did not change anything.")
-            return redirect(url_for("profile"))
-        # check if user exists in db
-        elif request_user == existing_user and request_user != session['user']:
-            flash("Username already exists.")
-            return redirect(url_for("profile"))
-        # check if email exists in db
-        elif request_mail == existing_email and request_mail != user_email:
-            flash("Email in allready in use.")
-            return redirect(url_for("profile"))
-
-        # put the data from the form in a variable
-        edit_profile = {
-            "username": request.form.get("username").lower(),
-            "email": request.form.get("email").lower(),
-        }
-        # push the data from the form to the db
-        mongo.db.users.update_one(
-            {"username": session["user"]}, {'$set': edit_profile})
-
-        # put the new user into 'session' cookie
-        session["user"] = request.form.get("username").lower()
-        flash("Profile successfully edited!")
-        return redirect(url_for("profile", username=session["user"]))
-
-    return render_template(
-        "profile.html", cash_of_user=cash_of_user, made_money=made_money,
-        user_email=user_email, send_on_fees=send_on_fees)
-
-
 @app.route("/sell/<stocks_bought_id>", methods=["POST"])
 def sell_stocks(stocks_bought_id):
     # check if the market is open
@@ -389,114 +497,6 @@ def sell_stocks(stocks_bought_id):
         # flash("the market is closed, you can only buy " +
         # "stocks when the market is open.")
         # return redirect(url_for("portfolio"))
-
-
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    if request.method == "POST":
-        # check if the username is valide
-        request_user = request.form.get("username")
-        if request_user == "" or not check_username(request_user.lower()):
-            flash(
-                "Username is not valide. Use between 5-15 character" +
-                " and only letters and numbers.")
-            return redirect(url_for("register"))
-        # check if the email is valide
-        request_mail = request.form.get("email")
-        if request_mail == "" or not check_email(request_mail.lower()):
-            flash("Please fill in a valid email address.")
-            return redirect(url_for("register"))
-        # check if the password is valide
-        request_pw = request.form.get("password")
-        if request_pw == "" or not check_pw(request_pw):
-            flash(
-                "Password is not valid. use between the 5-15 " +
-                "characters")
-            return redirect(url_for("register"))
-
-        # make variable to check if email address exists in db
-        existing_email = mongo.db.users.find_one(
-            {"email": request.form.get("email").lower()})
-
-        # make variable to check if username address exists in db
-        existing_user = mongo.db.users.find_one(
-            {"username": request.form.get("username").lower()})
-
-        # check if username already exists in db
-        if existing_user:
-            flash("Username already exists")
-            return redirect(url_for("register"))
-
-        # check if email already exists in db
-        if existing_email:
-            flash("Email already exists")
-            return redirect(url_for("register"))
-
-        # put the data from the form in a variable
-        register = {
-            "username": request.form.get("username").lower(),
-            "email": request.form.get("email").lower(),
-            "password": generate_password_hash(request.form.get("password")),
-            "cash": 10000,
-            "total_spend_fees": 0
-        }
-        # push the data from the form to the db
-        mongo.db.users.insert_one(register)
-
-        # put the new user into 'session' cookie
-        session["user"] = request.form.get("username").lower()
-        flash("Registration Successful!")
-        return redirect(url_for("home", username=session["user"]))
-    return render_template("register.html")
-
-
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    if request.method == "POST":
-        # check if the email is valide
-        request_mail = request.form.get("email")
-        if request_mail == "" or not check_email(request_mail.lower()):
-            flash("Please fill in a valid email address.")
-            return redirect(url_for("login"))
-        # check if the password is valide
-        request_pw = request.form.get("password")
-        if request_pw == "" or not check_pw(request_pw):
-            flash(
-                "Password is not valid. use between the 5-15 " +
-                "characters")
-            return redirect(url_for("login"))
-
-        # make variable to check if user exists in db
-        # by using the email address
-        existing_user = mongo.db.users.find_one(
-            {"email": request.form.get("email").lower()})
-
-        if existing_user:
-            # ensure hashed password matches user input
-            if check_password_hash(existing_user["password"], request_pw):
-                # if the password and email do match then
-                # put the usersname into session cookie
-                session["user"] = existing_user["username"].lower()
-                # display a welcome message to the user
-                flash("Welcome, {}".format(existing_user["username"].lower()))
-                return redirect(url_for("home", username=session["user"]))
-            else:
-                # invalid password match
-                flash("Incorrect Email and/or Password")
-                return redirect(url_for("login"))
-        else:
-            # email doesn't exist
-            flash("Incorrect Email and/or Password")
-            return redirect(url_for("login"))
-    return render_template("login.html")
-
-
-@app.route("/logout")
-def logout():
-    # remove user from session cookies
-    flash("You have been logged out")
-    session.pop("user")
-    return redirect(url_for("login"))
 
 
 if __name__ == "__main__":
