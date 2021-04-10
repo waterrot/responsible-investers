@@ -10,7 +10,7 @@
                         <li>
                             <!-- the title of the the stock with the profit show -->
                             <div class="collapsible-header">
-                                <h6>
+                                <h6 class="ml-2">
                                     <b>{{ stock_bought.stock_name }}</b>
                                     {% if v * stock_bought.stock_amount > stock_bought.stock_price %}
                                         <i class="green-text">
@@ -128,6 +128,9 @@
                         <h6><b>Email adress:</b> {{ user_email }}</h6>
                         <h6><b>Total spend fees:</b> ${{ send_on_fees }}</h6>
                         <h6><b>free cash:</b> ${{ cash_of_user }}</h6>
+                        {% if session.user == 'admin' %}
+                            <h6><b>Total money made by fees:</b> ${{ made_money }}</h6>
+                        {% endif %}
                     </div>
                     <div class="card-action padding-card">
                             <a href="{{ url_for('profile') }}" class="btn btn-green">

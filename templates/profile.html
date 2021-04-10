@@ -30,6 +30,9 @@
                             </div>
                             <h6><b>Total spend fees:</b> ${{ send_on_fees }}</h6>
                             <h6><b>free cash:</b> ${{ cash_of_user }}</h6>
+                            {% if session.user == 'admin' %}
+                                <h6><b>Total money made by fees:</b> ${{ made_money }}</h6>
+                            {% endif %}
                             <br>
                             <!-- submit button -->
                             <button type="submit" class="btn btn-green">

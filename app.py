@@ -206,9 +206,12 @@ def portfolio():
     # get the total spend amount of cash on fees
     send_on_fees = round(mongo.db.users.find_one(
         {"username": session["user"]})["total_spend_fees"], 2)
+    # get the total amount the business made by fees
+    made_money = round(mongo.db.users.find_one(
+        {"username": "admin"})["total_income_business"], 2)
 
     return render_template(
-        "portfolio.html", stocks_bought=stocks_bought,
+        "portfolio.html", stocks_bought=stocks_bought, made_money=made_money,
         live_prices=live_prices, cash_of_user=cash_of_user,
         user_email=user_email, send_on_fees=send_on_fees)
 
@@ -223,8 +226,11 @@ def profile():
     user_email = mongo.db.users.find_one(
         {"username": session["user"]})["email"]
     # get the total spend amount of cash on fees
-    send_on_fees = mongo.db.users.find_one(
-        {"username": session["user"]})["total_spend_fees"]
+    send_on_fees = round(mongo.db.users.find_one(
+        {"username": session["user"]})["total_spend_fees"], 2)
+    # get the total amount the business made by fees
+    made_money = round(mongo.db.users.find_one(
+        {"username": "admin"})["total_income_business"], 2)
 
     if request.method == "POST":
         # check if the username is valide
@@ -276,7 +282,7 @@ def profile():
         return redirect(url_for("profile", username=session["user"]))
 
     return render_template(
-        "profile.html", cash_of_user=cash_of_user,
+        "profile.html", cash_of_user=cash_of_user, made_money=made_money,
         user_email=user_email, send_on_fees=send_on_fees)
 
 
