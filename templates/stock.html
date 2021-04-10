@@ -39,11 +39,13 @@
                     <div class="input-field col s3">
                         <input type="number" name="total_price" id="total_price" placeholder="price in $" readonly />
                     </div>
+                    <!-- this is the submit button -->
                     <div class="input-field col s6">
                         <button type="submit" class="btn btn-green">
                             Buy stock now <i class="far fa-credit-card"></i>
                         </button>
                     </div>
+                    <!-- a message with how much the fee for the company is -->
                     <p class="col s12 grey-text">
                         This amount is excl. of the $0.50 + 0.3% purchase fee. 
                     </p>
@@ -51,7 +53,19 @@
             </form>
         </div>
     </div>
-    <div class="divider"></div>
+    <div class="row">
+        <!-- company description from Yahoo Finance -->
+        <div class="col s12 l10">
+            <h4><b>Company description:</b></h4>
+            <p>{{ stock_description }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <!-- company data imported from Yahoo Finance -->
+        <div class="col s12">
+            <h4><b>Company data information:</b></h4>
+        </div>
+    </div>
     <div class="row">
         <div class="col s12 m6">
             <table class="striped">

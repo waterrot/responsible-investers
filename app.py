@@ -66,6 +66,9 @@ def stock_page(stock_info_id):
         # get the whole stock name from db
         if key == "stock_name":
             stock_title = value
+        # get the company description from db
+        if key == "description":
+            stock_description = value
     # get the amount of free cash of the user
     cash_of_user = mongo.db.users.find_one(
         {"username": session["user"]})["cash"]
@@ -191,7 +194,7 @@ def stock_page(stock_info_id):
         stock_info_second_part=stock_info_second_part, stock_price=stock_price,
         change_percent_price=change_percent_price, stock_title=stock_title,
         max_amount=max_amount, stock_dic=stock_dic, stock_name=stock_name,
-        market_status=market_status)
+        market_status=market_status, stock_description=stock_description)
 
 
 @app.route("/portfolio")
