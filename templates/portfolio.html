@@ -8,6 +8,7 @@
                 {% for k, v in live_prices.items() %}
                     {% if k == stock_bought.stock_name_short %}
                         <li>
+                            <!-- the title of the the stock with the profit show -->
                             <div class="collapsible-header">
                                 <h6>
                                     <b>{{ stock_bought.stock_name }}</b>
@@ -30,6 +31,7 @@
                                 <table>
                                     <tbody>
                                         <tr class="no-border">
+                                            <!-- current stock price (one stock) -->
                                             <td><b>Current stock price:</b>
                                                 {% if v > stock_bought.price_per_stock %}
                                                     <i class="green-text">${{ v }}</i>
@@ -39,9 +41,11 @@
                                                     <i class="blue-text">${{ v }}</i>
                                                 {% endif %}
                                             </td>
+                                            <!-- price per stock (bought) -->
                                             <td><b>Price per stock (bought):</b> ${{ stock_bought.price_per_stock }}</td>
                                         </tr>
                                         <tr class="no-border">
+                                            <!-- live price of all stocks owned -->
                                             <td><b>Current live value:</b>
                                                 {% if v * stock_bought.stock_amount > stock_bought.stock_price %}
                                                     <i class="green-text">
@@ -55,9 +59,11 @@
                                                     <i class="blue-text">${{ v * stock_bought.stock_amount }}</i>
                                                 {% endif %}
                                             </td>
+                                            <!-- total price for which the user bought the stocks -->
                                             <td><b>Total value (bought):</b> ${{ stock_bought.stock_price }}</td>
                                         </tr>
                                         <tr class="no-border">
+                                            <!-- the profit/loss the user has made -->
                                             <td><b>Total profit/loss:</b>
                                                 {% if v * stock_bought.stock_amount > stock_bought.stock_price %}
                                                     <i class="green-text">
@@ -76,7 +82,13 @@
                                                     </i>
                                                 {% endif %}
                                             </td>
+                                            <!-- total amount of stocks bought -->
+                                            <td><b>Total amount of stocks owned:</b> {{ stock_bought.stock_amount }}</td>
+                                        </tr>
+                                        <tr class="no-border">
+                                            <td></td>
                                             <td>
+                                                <!-- sell the stock using this form -->
                                                 <b>Sell stocks:</b>
                                                 <form method="POST" action="{{ url_for('sell_stocks', stocks_bought_id=stock_bought._id) }}">
                                                     <div class="row margin-0">

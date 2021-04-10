@@ -118,17 +118,19 @@ def stock_page(stock_info_id):
         # if user already has the stock, execute this if statement
         if mongo.db.stocks_bought.count_documents(data_find) == 1:
             # get the amount of stocks the user allready has
-            stocks_owned = data_find["stock_amount"]
+            stocks_user_has = mongo.db.stocks_bought.find_one(data_find)
+            stocks_owned = stocks_user_has["stock_amount"]
             # get the price of the amount of stocks the user allready has
-            stocks_price_owned = data_find["stock_price"]
+            price_user_paid = mongo.db.stocks_bought.find_one(data_find)
+            stocks_price_own = price_user_paid["stock_price"]
             # get the changed price per stock
-            changed_price_per_stock = (stocks_price_owned + price_change)/(
+            changed_price_per_stock = (stocks_price_own + price_change)/(
                 stocks_owned + get_stock_amount)
 
             # update the new purchase to the db
             mongo.db.stocks_bought.update_one(data_find, {'$inc': {
                 "stock_price": price_change,
-                "stock_amount": get_stock_amount,
+                "stock_amount": get_stock_amount}, '$set': {
                 "price_per_stock": changed_price_per_stock}})
 
             # extract the stock buy price of the free cash of user and
@@ -202,8 +204,8 @@ def portfolio():
     user_email = mongo.db.users.find_one(
         {"username": session["user"]})["email"]
     # get the total spend amount of cash on fees
-    send_on_fees = mongo.db.users.find_one(
-        {"username": session["user"]})["total_spend_fees"]
+    send_on_fees = round(mongo.db.users.find_one(
+        {"username": session["user"]})["total_spend_fees"], 2)
 
     return render_template(
         "portfolio.html", stocks_bought=stocks_bought,
@@ -366,7 +368,7 @@ def register():
             "username": request.form.get("username").lower(),
             "email": request.form.get("email").lower(),
             "password": generate_password_hash(request.form.get("password")),
-            "cash": 100000,
+            "cash": 10000,
             "total_spend_fees": 0
         }
         # push the data from the form to the db
