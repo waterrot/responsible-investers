@@ -25,7 +25,42 @@
                                             </td>
                                             <td><b>Price per stock (bought):</b> ${{ stock_bought.price_per_stock }}</td>
                                         </tr>
-                                        
+                                        <tr class="no-border">
+                                            <td><b>Current live value:</b>
+                                                {% if v * stock_bought.stock_amount > stock_bought.stock_price %}
+                                                    <i class="green-text">
+                                                        ${{ v * stock_bought.stock_amount }}
+                                                    </i>
+                                                {% elif v * stock_bought.stock_amount < stock_bought.stock_price %}
+                                                    <i class="red-text">
+                                                        ${{ v * stock_bought.stock_amount }}
+                                                    </i>
+                                                {% else %}
+                                                    <i class="blue-text">${{ v * stock_bought.stock_amount }}</i>
+                                                {% endif %}
+                                            </td>
+                                            <td><b>Total value (bought):</b> ${{ stock_bought.stock_price }}</td>
+                                        </tr>
+                                        <tr class="no-border">
+                                            <td><b>Total profit/loss:</b>
+                                                {% if v * stock_bought.stock_amount > stock_bought.stock_price %}
+                                                    <i class="green-text">
+                                                        +${{ v / stock_bought.price_per_stock * stock_bought.stock_price - stock_bought.stock_price }}
+                                                        (+{{ 100 * v / stock_bought.price_per_stock - 100 }}%)
+                                                    </i>
+                                                {% elif v * stock_bought.stock_amount < stock_bought.stock_price %}
+                                                    <i class="red-text">
+                                                        -${{ v / stock_bought.price_per_stock * stock_bought.stock_price - stock_bought.stock_price }}
+                                                        (-{{ 100 * v / stock_bought.price_per_stock - 100 }}%)
+                                                    </i>
+                                                {% else %}
+                                                    <i class="blue-text">
+                                                        ${{ v / stock_bought.price_per_stock * stock_bought.stock_price - stock_bought.stock_price }}
+                                                        ({{ 100 * v / stock_bought.price_per_stock - 100 }}%)
+                                                    </i>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
                                     {% endif %}
                                 {% endfor %}
                                 <tr class="no-border">
