@@ -48,6 +48,19 @@ app.secret_key = os.environ.get("SECRET_KEY")
 mongo = PyMongo(app)
 
 
+# these 2 functions are made with help of:
+# https://www.askpython.com/python-modules/flask/flask-error-handling
+# Handling error 404 and displaying own custom page
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('404.html'), 404
+
+# Handling error 500 and displaying own custom page
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('500.html'), 500
+
+
 @app.route("/")
 def home():
     stock_dic_info = mongo.db.stock_info.find()
