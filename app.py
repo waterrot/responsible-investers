@@ -213,7 +213,20 @@ def portfolio():
 
 @app.route("/profile")
 def profile():
-    return render_template("profile.html")
+    # get the amount of free cash of the user
+    cash_of_user_unrounded = mongo.db.users.find_one(
+        {"username": session["user"]})["cash"]
+    cash_of_user = round(cash_of_user_unrounded, 2)
+    # get the email adres of the user
+    user_email = mongo.db.users.find_one(
+        {"username": session["user"]})["email"]
+    # get the total spend amount of cash on fees
+    send_on_fees = mongo.db.users.find_one(
+        {"username": session["user"]})["total_spend_fees"]
+
+    return render_template(
+        "profile.html", cash_of_user=cash_of_user,
+        user_email=user_email, send_on_fees=send_on_fees)
 
 
 @app.route("/sell/<stocks_bought_id>", methods=["POST"])
