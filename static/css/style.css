@@ -21,6 +21,10 @@ main {
     min-height: 275px;
 }
 
+.min-height-110 {
+    min-height: 110px;
+}
+
 .no-border {
     border: 0px;
 }
@@ -52,6 +56,10 @@ main {
     margin-right: 10px;
 }
 
+.line-height-110 {
+    line-height: 110px;
+}
+
 .sidenav li>a>i {
     margin: 0px;
 }
@@ -70,6 +78,10 @@ main {
 
 .no-left {
     left: 0px !important;
+}
+
+.mt-20{
+    margin: 20px 0px 0px;
 }
 
 /* image styling */
