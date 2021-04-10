@@ -19,6 +19,12 @@
 
     <header>
         <!-- top navbar -->
+        <!-- profile dropdown menu -->
+        <ul id="dropdown-profile" class="dropdown-content">
+            <li><a href="{{ url_for('profile') }}">Profile</a></li>
+            <li><a href="{{ url_for('portfolio') }}">Portfolio</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        </ul>
         <nav class="nav-extended grey darken-3">
             <div class="nav-wrapper">
                 <a href="{{ url_for('home') }}" class="brand-logo ml-2">RI</a>
@@ -27,13 +33,15 @@
                     <li><a href="#"><i class="fas fa-search"></i></a></li>
                     <li><a href="{{ url_for('home') }}">Home</a></li>
                     {% if session.user %}
-                        <li><a href="{{ url_for('portfolio') }}">portfolio</a></li>
-                    {% endif %}
-                    {% if session.user %}
-                        <li><a href="{{ url_for('logout') }}">logout</a></li>
+                        <!-- profile dropdown -->
+                        <li>
+                            <a class="dropdown-trigger" href="#!" data-target="dropdown-profile">
+                                Profile<i class="fas fa-caret-down ml-2"></i>
+                            </a>
+                        </li>
                     {% else %}
-                        <li><a href="{{ url_for('login') }}">login</a></li>
-                        <li><a class="btn btn-green" href="{{ url_for('register') }}">register</a></li>
+                        <li><a href="{{ url_for('login') }}">Login</a></li>
+                        <li><a class="btn btn-green" href="{{ url_for('register') }}">Register</a></li>
                     {% endif %}
                 </ul>
             </div>
@@ -45,13 +53,12 @@
             <li><a href="#"><i class="fas fa-search"></i>Search</a></li>
             <li><a href="{{ url_for('home') }}">Home</a></li>
             {% if session.user %}
-                <li><a href="{{ url_for('portfolio') }}">portfolio</a></li>
-            {% endif %}
-            {% if session.user %}
-                <li><a href="{{ url_for('logout') }}">logout</a></li>
+                <li><a href="{{ url_for('profile') }}">Profile</a></li>
+                <li><a href="{{ url_for('portfolio') }}">Portfolio</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
             {% else %}
-                <li><a href="{{ url_for('login') }}">login</a></li>
-                <li><a class="btn btn-green" href="{{ url_for('register') }}">register</a></li>
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+                <li><a class="btn btn-green" href="{{ url_for('register') }}">Register</a></li>
             {% endif %}
         </ul>
     </header>
@@ -59,13 +66,13 @@
     <section>
         <!-- flash messages -->
         {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        {% for message in messages %}
-        <div class="row flashes">
-            <h4 class="light-blue center-align">{{ message }}</h4>
-        </div>
-        {% endfor %}
-        {% endif %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="row flashes">
+                        <h4 class="light-blue center-align">{{ message }}</h4>
+                    </div>
+                {% endfor %}
+            {% endif %}
         {% endwith %}
     </section>
 

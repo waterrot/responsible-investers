@@ -1,6 +1,7 @@
 $(document).ready(function(){
     $('.sidenav').sidenav({edge: "right"});
     $('.collapsible').collapsible();
+    $(".dropdown-trigger").dropdown();
   });
 
 /* code to multiply the quantity with the stock price */

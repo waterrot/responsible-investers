@@ -198,6 +198,11 @@ def portfolio():
         live_prices=live_prices)
 
 
+@app.route("/profile")
+def profile():
+    return render_template("profile.html")
+
+
 @app.route("/sell/<stocks_bought_id>", methods=["POST"])
 def sell_stocks(stocks_bought_id):
     # find the stock the user wants to sell
