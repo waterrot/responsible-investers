@@ -47,9 +47,9 @@ The game can be used locally by cloning or downloading the repository from [gith
 
 3. Choose directory to download it to and unzip file
 
-4. Access the CV-builder-master folder
+4. Access the Responsible-Investors-master folder
 
-5. Open index.html into your browser to open the CV Builder
+5. Open index.html into your browser to open the Responsible Investors website
 
 ### Clone with Git
 
@@ -61,13 +61,13 @@ In your local IDE:
 
 3. Enter the following line in the console:
 
-    `git clone https://github.com/waterrot/Ultimate-Piccolo-The-Game`
+    `git clone https://github.com/waterrot/responsible-investors`
 
 4. Press enter
 
 ### Live Demo
 
-The live demo of the cv builder has been deployed to Github Pages and is accessible [here](https://waterrot.github.io/Ultimate-Piccolo-The-Game/).
+The live demo of the cv builder has been deployed to Heroku and is accessible [here](http://responsible-investors.herokuapp.com/).
 
 ---
 
@@ -77,44 +77,48 @@ The live demo of the cv builder has been deployed to Github Pages and is accessi
 
 _Generic User / Player_
 
--   I want to play a game with my friends.
--   I want to be able to donate money to the creator.
--   I want to email the creator if I have any questions.
--   I want to reset a game when I am playing one.
--   I want to add players to the game.
--   I want to delete players from the game.
--   I want to close the game and later open it when I open the browser again.
+-   I want to make an account on the Responsible Investors website.
+-   I want to login on the Responsible Investors website.
+-   I want to logout of the Responsible Investors website.
+-   I want to change my email adress and/or username.
+-   I want to read more information about a curtain stock.
+-   I want to see which stocks I can buy on the website
+-   I want to buy a stock that I like.
+-   I want to see how much I gained/lossed on my stock purchase.
+-   I want to see how much I spend on trading fees.
+-   I want to sell one of my stocks
 
 These goals are accomplished in the following way:
 
--   The game can be played when the player gives the names to the game and presses enter.
--   Players can donate money through a modal which links to Paypal.
+-   A new user can click on the register button on the home screen to make a new account.
+-   An existing user can click on the login link to log into the website.
+-   An existing user can click on the logout button when he/she is logged in and would like to logout.
+-   An existing user can go to profile to change their username/emailadres.
+-   An existing user has to login and then can go to the home page to compare the different stocks provided by website.
+-   An existing user can click on the stock he/she would like to buy and then fill in the amount of stock he/she wants to buy.
+-   An existing user who allready has bought a stock can go to the portfolio to see how their stock is performing.
+-   An existing user who allready has bought a stock can see how much he/she has spend on fees on the portfolio page and the profile page.
+-   An existing user who allready has bought a stock can sell their stock on the portfolio page by filling in the amount he/she would like to sell and then click the sell button.
 -   In the footer of the site the email addresse of the creator is visible so people can get in touch.
--   When the players are playing a game the reset button will be visible under in the screen.
--   when the player is on the "add players" screen there is an option to add and delete players using a button. 
--   All the data is stored in local storage so when a player refreshes the page the game won't be
 
 ### Wireframes
 
 The wireframe was made by hand. The final version of the wireframes can be found [here](assets/images/readme/wireframe.png)
 
 ### Design
-When the game was made the design was focussed on mobile first. down below you can find the 3 main design challenges: 
-
-
-#### Fonts
-I used [Google Fonts](https://fonts.google.com/) to select a font type. I looked for a font with a lot of rounding who was nice to look at. 
-I ended up using Montserrat because it is easy to read and matches the roundings of the card in which the text is displayed.
+When the website was made it had a focus on mobile and on desktop vieuw. down below you can find the 2 main design challenges: 
 
 #### colors
-The yellow color (#F7DE6A) was manually selected because it is the color of beer and then the oppesite color (the blue/purple color #F7DE6A) was selected with the help of [Adobe Color Wheel](https://color.adobe.com/nl/create/color-wheel).
-In the picure below you can see the home screen with the 2 main colors:
-
-![home screen](assets/images/readme/home-screen.png)
+The green color (#00c853) was choosen from the standaard colors of Materialize. For a broker the color green and red are important,
+ these 2 colors are associated with 'win/loss' and influences to users unconsciously. For the red color we choose #F44336, this color 
+ was also chosen with the help of Materialize.
 
 #### Logo
-The logo was made with help of [Canva](https://canva.com). I used a simplistic elements simplic and the same font I used on the site. 
-I reason why I chose to make it simple is to show off some peace and make it nice to look at. 
+The logo was made with help of [Canva](https://canva.com). I used windmills and an arrow who points upwords. I choose for this because the image 
+of the website is green/responsible investing and a combination of gaining money (what the arrow symbolizes) and the windmill, who stends for a green world,
+seems like a good combination for that.
+
+![Responsible Investors](static/images/logo_ri.png)
 
 ---
 
