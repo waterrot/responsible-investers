@@ -81,6 +81,8 @@ def stock_page(stock_info_id):
     change_price = yf2.get_current_change()
     # the relate percent change since market opening
     change_percent_price = round(change_price*100/close_price, 2)
+    # market status
+    market_status = si.get_market_status()
 
     # get the stock data for in the table
     stock_table = si.get_quote_table(stock_name)
@@ -97,6 +99,8 @@ def stock_page(stock_info_id):
 
     # code to buy the stocks
     if request.method == "POST":
+        # check if the market is open
+        # if market_status == "OPEN":
         # define variables
         # the criteria for when the stock is allready bought by the user
         data_find = {"bought_by": session["user"],
@@ -144,8 +148,8 @@ def stock_page(stock_info_id):
             mongo.db.users.update_one(user_is_admin, {'$inc': {
                 "total_income_business": spend_on_fee}})
 
-            flash(f"You successfully bought {get_stock_amount} {stock_name} " +
-                  f"stocks for ${price_change}")
+            flash(f"You successfully bought {get_stock_amount}" +
+                  f" {stock_name} stocks for ${price_change}")
             return redirect(url_for("portfolio"))
         else:
             # get the price per stock
@@ -174,15 +178,20 @@ def stock_page(stock_info_id):
             mongo.db.users.update_one(user_is_admin, {'$inc': {
                 "total_income_business": spend_on_fee}})
 
-            flash(f"You successfully bought {get_stock_amount} {stock_name} " +
-                  f"stocks for ${price_change}")
+            flash(f"You successfully bought {get_stock_amount} " +
+                  f"{stock_name} stocks for ${price_change}")
             return redirect(url_for("portfolio"))
+        # else:
+            # flash("the market is closed, you can only buy " +
+            # "stocks when the market is open.")
+            # return redirect(url_for("home"))
 
     return render_template(
         "stock.html", stock_info_first_part=stock_info_first_part,
         stock_info_second_part=stock_info_second_part, stock_price=stock_price,
         change_percent_price=change_percent_price, stock_title=stock_title,
-        max_amount=max_amount, stock_dic=stock_dic, stock_name=stock_name)
+        max_amount=max_amount, stock_dic=stock_dic, stock_name=stock_name,
+        market_status=market_status)
 
 
 @app.route("/portfolio")
@@ -193,7 +202,12 @@ def portfolio():
         "GOOG": round(si.get_live_price("GOOG"), 2),
         "TSLA": round(si.get_live_price("TSLA"), 2),
         "NIO": round(si.get_live_price("NIO"), 2),
-        "FSR": round(si.get_live_price("FSR"), 2)
+        "FSR": round(si.get_live_price("FSR"), 2),
+        "AMZN": round(si.get_live_price("AMZN"), 2),
+        "AAPL": round(si.get_live_price("AAPL"), 2),
+        "DM": round(si.get_live_price("DM"), 2),
+        "SSYS": round(si.get_live_price("SSYS"), 2),
+        "DDD": round(si.get_live_price("DDD"), 2)
     }
 
     # get the amount of free cash of the user
@@ -288,6 +302,8 @@ def profile():
 
 @app.route("/sell/<stocks_bought_id>", methods=["POST"])
 def sell_stocks(stocks_bought_id):
+    # check if the market is open
+    # if market_status == "OPEN":
     # find the stock the user wants to sell
     stock_dic = mongo.db.stocks_bought.find_one(
         {"_id": ObjectId(stocks_bought_id)})
@@ -326,6 +342,10 @@ def sell_stocks(stocks_bought_id):
         flash(f"You successfully sold {stocks_sell_amount} {stock_name} " +
               f"stocks for ${stock_sell_price}")
         return redirect(url_for("portfolio"))
+    # else:
+        # flash("the market is closed, you can only buy " +
+        # "stocks when the market is open.")
+        # return redirect(url_for("home"))
 
 
 @app.route("/register", methods=["GET", "POST"])
