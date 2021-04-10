@@ -4,15 +4,30 @@
     <ul class="collapsible">
         {% for stock_bought in stocks_bought %}
             {% if session.user|lower == stock_bought.bought_by|lower %}
-                <li>
-                    <div class="collapsible-header">
-                        <h6><b>{{ stock_bought.stock_name }}</b></h6>
-                    </div>
-                    <div class="collapsible-body">
-                        <table>
-                            <tbody>
-                                {% for k, v in live_prices.items() %}
-                                    {% if k == stock_bought.stock_name_short %}
+                {% for k, v in live_prices.items() %}
+                    {% if k == stock_bought.stock_name_short %}
+                        <li>
+                            <div class="collapsible-header">
+                                <h6>
+                                    <b>{{ stock_bought.stock_name }}</b>
+                                    {% if v * stock_bought.stock_amount > stock_bought.stock_price %}
+                                        <i class="green-text">
+                                            +${{ v / stock_bought.price_per_stock * stock_bought.stock_price - stock_bought.stock_price }} (+{{ 100 * v / stock_bought.price_per_stock - 100 }}%)
+                                        </i>
+                                    {% elif v * stock_bought.stock_amount < stock_bought.stock_price %}
+                                        <i class="red-text">
+                                            -${{ v / stock_bought.price_per_stock * stock_bought.stock_price - stock_bought.stock_price }} (-{{ 100 * v / stock_bought.price_per_stock - 100 }}%)
+                                        </i>
+                                    {% else %}
+                                        <i class="blue-text">
+                                            ${{ v / stock_bought.price_per_stock * stock_bought.stock_price - stock_bought.stock_price }} ({{ 100 * v / stock_bought.price_per_stock - 100 }}%)
+                                        </i>
+                                    {% endif %}
+                                </h6>
+                            </div>
+                            <div class="collapsible-body">
+                                <table>
+                                    <tbody>
                                         <tr class="no-border">
                                             <td><b>Current stock price:</b>
                                                 {% if v > stock_bought.price_per_stock %}
@@ -60,31 +75,29 @@
                                                     </i>
                                                 {% endif %}
                                             </td>
+                                            <td>
+                                                <b>Sell stocks:</b>
+                                                <form method="POST" action="{{ url_for('sell_stocks', stocks_bought_id=stock_bought._id) }}">
+                                                    <div class="row margin-0">
+                                                        <div class="input-field col s4 margin-0 padding-0">
+                                                            <label class="no-left" for="stocks_sell">quantity</label>
+                                                            <input type="number" name="stocks_sell" id="stocks_sell" min="0" max="{{ stock_bought.stock_amount }}" required />
+                                                        </div>
+                                                        <div class="input-field col s3 margin-0">
+                                                            <button type="submit" class="btn red">
+                                                                Sell
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </td>
                                         </tr>
-                                    {% endif %}
-                                {% endfor %}
-                                <tr class="no-border">
-                                    <td>link to</td>
-                                    <td>
-                                        <form method="POST" action="{{ url_for('sell_stocks', stocks_bought_id=stock_bought._id) }}">
-                                            <div class="row margin-0">
-                                                <div class="input-field col s4 margin-0 padding-0">
-                                                    <label class="no-left" for="stocks_sell">quantity</label>
-                                                    <input type="number" name="stocks_sell" id="stocks_sell" min="0" max="{{ stock_bought.stock_amount }}" required />
-                                                </div>
-                                                <div class="input-field col s3 margin-0">
-                                                    <button type="submit" class="btn red">
-                                                        Sell
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </li>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endfor %}
             {% endif %}
         {% endfor %}
     </ul>

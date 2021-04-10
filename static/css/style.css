@@ -76,6 +76,12 @@ main {
     align-items: center;
 }
 
+/* styling portfolio */
+.collapsible-header i {
+    display: inline;
+    font-size: 1em;
+}
+
 /* footer styling */
 footer a {
     color: #bdbdbd;
