@@ -35,14 +35,14 @@ def check_username(name):
 def check_pw(password):
     # check if the password is valide
     # allow all characters with a max length of 5-20
-    regex = "^.{5,20}$"
+    regex = "/^([0-9][0-9][0-9]{0,2}|[0-9]|10000)$"
     return re.match(regex, password)
 
 
 # function to check if the number of stocks buy/sell is valide
 def check_stock(number_stocks):
-    # allow only numbers with a max length of 40
-    regex = "^[0-9][0-9][0-9][1-9]{1,40}$"
+    # numbers between 1 en 10000 are allowed (not 0)
+    regex = "^([1-9][0-9][0-9]{0,2}|[1-9]|10000)$"
     return re.match(regex, number_stocks)
 
 
