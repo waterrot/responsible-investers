@@ -39,6 +39,13 @@ def check_pw(password):
     return re.match(regex, password)
 
 
+# function to check if the number of stocks buy/sell is valide
+def check_stock(number_stocks):
+    # allow only numbers with a max length of 40
+    regex = "^[0-9][0-9][0-9][1-9]{1,40}$"
+    return re.match(regex, number_stocks)
+
+
 app = Flask(__name__)
 
 app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
@@ -54,6 +61,7 @@ mongo = PyMongo(app)
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('404.html'), 404
+
 
 # Handling error 500 and displaying own custom page
 @app.errorhandler(500)
@@ -82,9 +90,13 @@ def stock_page(stock_info_id):
         # get the company description from db
         if key == "description":
             stock_description = value
+
     # get the amount of free cash of the user
     cash_of_user = mongo.db.users.find_one(
         {"username": session["user"]})["cash"]
+    # variable to get the id of the stock
+    get_stock_id = mongo.db.stock_info.find_one(
+        {"stock_name_short": stock_name})["_id"]
 
     yf2 = yf(stock_name)
     # get the stock price
@@ -129,11 +141,18 @@ def stock_page(stock_info_id):
 
         # get the number of stocks bought
         get_stock_amount = int(request.form.get("stock_total"))
+        # get the number of stocks bought in a string to valide it
+        get_stock_amount_str = request.form.get("stock_total")
         # get to purchase value of the stocks excl fee
         price_change = round(stock_price * get_stock_amount, 2)
         # get amount spend on fee by purchasing a stock
         spend_on_fee = round(0.5 + (0.003 * price_change), 2)
         total_spend_stock = round(price_change + spend_on_fee, 2)
+
+        # check if the number of stock the user wants to buy is valide
+        if get_stock_amount_str == "" or not check_stock(get_stock_amount_str):
+            flash("Enter a valide number.")
+            return redirect(url_for("stock_page", stock_info_id=get_stock_id))
 
         # if user already has the stock, execute this if statement
         if mongo.db.stocks_bought.count_documents(data_find) == 1:
@@ -200,7 +219,8 @@ def stock_page(stock_info_id):
         # else:
             # flash("the market is closed, you can only buy " +
             # "stocks when the market is open.")
-            # return redirect(url_for("home"))
+            # return redirect(
+            #   url_for("stock_page", stock_info_id=get_stock_id))
 
     return render_template(
         "stock.html", stock_info_first_part=stock_info_first_part,
@@ -330,10 +350,17 @@ def sell_stocks(stocks_bought_id):
 
     # get the amount of stocks user wants to sell
     stocks_sell_amount = int(request.form.get("stocks_sell"))
+    # get the number of stocks bought in a string to valide it
+    stock_buy_check = request.form.get("stocks_sell")
     # get the live stock price
     stock_price_live = si.get_live_price(stock_name)
     # get the sell price of all stocks
     stock_sell_price = round(stocks_sell_amount * stock_price_live, 2)
+
+    # check if the number of stock the user wants to buy is valide
+    if stock_buy_check == "" or not check_stock(stock_buy_check):
+        flash("Enter a valide number.")
+        return redirect(url_for("portfolio"))
 
     # sell the stocks
     mongo.db.stocks_bought.update_one(stock_dic, {'$inc': {
@@ -361,7 +388,7 @@ def sell_stocks(stocks_bought_id):
     # else:
         # flash("the market is closed, you can only buy " +
         # "stocks when the market is open.")
-        # return redirect(url_for("home"))
+        # return redirect(url_for("portfolio"))
 
 
 @app.route("/register", methods=["GET", "POST"])
