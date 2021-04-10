@@ -17,6 +17,10 @@ main {
     min-height: 70vh;
 }
 
+.min-height-card {
+    min-height: 250px;
+}
+
 .no-border {
     border: 0px;
 }

@@ -4,14 +4,14 @@
     <div class="row">
         {% for stock in stocks %}
             <div class="col s12 m8 l4 offset-m2">
-                <div class="card horizontal">
+                <div class="card horizontal min-height-card">
                     <div class="card-image col s5 div-of-image-card">
                         <img src="{{ stock.photo_link }}" class="image-card">
                     </div>
                     <div class="card-stacked">
                         <div class="card-content padding-card">
                             <h6><b>{{ stock.stock_name }}</b></h6>
-                            <p>I am a very simple card. I am good at containing small bits of information.</p>
+                            <p>{{ stock.description_short }}</p>
                         </div>
                         <div class="card-action padding-card">
                              <a href="{{ url_for('stock_page', stock_info_id=stock._id) }}" class="btn btn-green">
