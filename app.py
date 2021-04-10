@@ -190,12 +190,25 @@ def portfolio():
     live_prices = {
         "GOOG": round(si.get_live_price("GOOG"), 2),
         "TSLA": round(si.get_live_price("TSLA"), 2),
-        "UBER": round(si.get_live_price("UBER"), 2)
+        "NIO": round(si.get_live_price("NIO"), 2),
+        "FSR": round(si.get_live_price("FSR"), 2)
     }
+
+    # get the amount of free cash of the user
+    cash_of_user_unrounded = mongo.db.users.find_one(
+        {"username": session["user"]})["cash"]
+    cash_of_user = round(cash_of_user_unrounded, 2)
+    # get the email adres of the user
+    user_email = mongo.db.users.find_one(
+        {"username": session["user"]})["email"]
+    # get the total spend amount of cash on fees
+    send_on_fees = mongo.db.users.find_one(
+        {"username": session["user"]})["total_spend_fees"]
 
     return render_template(
         "portfolio.html", stocks_bought=stocks_bought,
-        live_prices=live_prices)
+        live_prices=live_prices, cash_of_user=cash_of_user,
+        user_email=user_email, send_on_fees=send_on_fees)
 
 
 @app.route("/profile")
