@@ -85,14 +85,13 @@
         <div class="container">
             <div class="row">
                 <div class="col l6 s12">
-                    <h5 class="white-text">Footer Content</h5>
+                    <h5 class="white-text">Content pages:</h5>
                     <ul>
                         <li><a href="{{ url_for('home') }}">Home</a></li>
                         <li><a href="#">Search</a></li>
                         {% if session.user %}
+                            <li><a href="{{ url_for('profile') }}">Profile</a></li>
                             <li><a href="{{ url_for('portfolio') }}">Portfolio</a></li>
-                        {% endif %}
-                        {% if session.user %}
                             <li><a href="{{ url_for('logout') }}">logout</a></li>
                         {% else %}
                             <li><a href="{{ url_for('login') }}">login</a></li>
@@ -117,7 +116,7 @@
         </div>
         <div class="footer-copyright">
             <div class="container">
-                © 2021 Copyright Text
+                © 2021 Responsible Investors
             </div>
         </div>
     </footer>

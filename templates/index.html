@@ -2,6 +2,49 @@
 {% block content %}
     
     <div class="row">
+        <div class="col s12 m8 offset-m2">
+            <div class="card">
+                <div class="card-content">
+                    <div class="row">
+                        <div class="col s12 l6">
+                            <h5 class="center"><b>Hi there!!</b></h5>
+                            {% if session.user %}
+                                <p class="center">
+                                    Good to see you! We are happy to have you here. Have a look around if there is any stock you like.
+                                    We from Responsible Investors are always bussy with adding new and sustainable stocks to our platform.
+                                    Feel free to send us a mail if you have a tip. <i class="far fa-smile-wink"></i> 
+                                </p>
+                                <p class="center">
+                                    Click on the button below to see you portfolio and
+                                    your profile. This is the place where your stocks can be found!
+                                </p>
+                                <br>
+                                <div class="center">
+                                    <a class="btn btn-green" href="{{ url_for('portfolio') }}">Check your Portfolio</a>
+                                </div>
+                            {% else %}
+                                <p class="center">
+                                    The Responsible Investors is a platform where you can buy and sell stocks of companies
+                                    who try to make the world a better place. This goes from green energy to big tech companies
+                                    who changed the world in a positive way. Are you curious which stock you can trade on our platform?
+                                    Sign in below or login if you allready have an account!
+                                </p>
+                                <br>
+                                <div class="center">
+                                    <a class="btn btn-green" href="{{ url_for('register') }}">register</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col l6 hide-on-med-and-down">
+                             <img src="{{ url_for('static', filename='images/green_energy.png') }}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
         {% for stock in stocks %}
             <div class="col s12 m8 l4 offset-m2">
                 <div class="card horizontal min-height-card">
