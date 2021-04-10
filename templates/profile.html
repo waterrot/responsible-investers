@@ -28,8 +28,11 @@
                                     <label for="email">Email</label>
                                 </div>
                             </div>
+                            <!-- information about the user -->
                             <h6><b>Total spend fees:</b> ${{ send_on_fees }}</h6>
                             <h6><b>free cash:</b> ${{ cash_of_user }}</h6>
+                            <!-- is the user is the admin he or she can see how much the business has made out of -->
+                            <!-- fees payed by the users of the platform -->
                             {% if session.user == 'admin' %}
                                 <h6><b>Total money made by fees:</b> ${{ made_money }}</h6>
                             {% endif %}

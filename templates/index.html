@@ -3,11 +3,13 @@
     
     <div class="row">
         <div class="col s12 m8 offset-m2">
+            <!-- this is the first card the user will see -->
             <div class="card mt-20">
                 <div class="card-content">
                     <div class="row">
                         <div class="col s12 l6">
                             <h5 class="center"><b>Hi there!!</b></h5>
+                            <!-- if the user is logged in do this -->
                             {% if session.user %}
                                 <p class="center">
                                     Good to see you! We are happy to have you here. Have a look around if there is any stock you like.
@@ -22,6 +24,7 @@
                                 <div class="center">
                                     <a class="btn btn-green" href="{{ url_for('portfolio') }}">Check your Portfolio</a>
                                 </div>
+                            <!-- if the user isn't logged in do this -->
                             {% else %}
                                 <p class="center">
                                     The Responsible Investors is a platform where you can buy and sell stocks of companies
