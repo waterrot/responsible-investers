@@ -11,14 +11,23 @@
                     <div class="collapsible-body">
                         <table>
                             <tbody>
-                                <tr class="no-border">
-                                    <td>{{ stock_bought.stock_amount }}</td>
-                                    <td><b>Total price bought:</b> ${{ stock_bought.stock_price }}</td>
-                                </tr>
-                                <tr class="no-border">
-                                    <td>${{ stock_bought.stock_price }}</td>
-                                    <td>${{ stock_bought.stock_price }}</td>
-                                </tr>
+                                {% for k, v in live_prices.items() %}
+                                    {% if k == stock_bought.stock_name_short %}
+                                        <tr class="no-border">
+                                            <td><b>Current stock price:</b>
+                                                {% if v > stock_bought.price_per_stock %}
+                                                    <i class="green-text">${{ v }}</i>
+                                                {% elif v < stock_bought.price_per_stock %}
+                                                    <i class="red-text">${{ v }}</i>
+                                                {% else %}
+                                                    <i class="blue-text">${{ v }}</i>
+                                                {% endif %}
+                                            </td>
+                                            <td><b>Price per stock (bought):</b> ${{ stock_bought.price_per_stock }}</td>
+                                        </tr>
+                                        
+                                    {% endif %}
+                                {% endfor %}
                                 <tr class="no-border">
                                     <td>link to</td>
                                     <td>

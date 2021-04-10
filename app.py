@@ -52,7 +52,6 @@ mongo = PyMongo(app)
 def home():
     stock_dic_info = mongo.db.stock_info.find()
     stocks = list(stock_dic_info)
-
     return render_template(
         "index.html", stocks=stocks, stock_dic_info=stock_dic_info)
 
@@ -107,6 +106,7 @@ def stock_page(stock_info_id):
         user_of_db = {"username": session["user"]}
         # the criteria to find the user 'admin'
         user_is_admin = {"username": "admin"}
+
         # get the number of stocks bought
         get_stock_amount = int(request.form.get("stock_total"))
         # get to purchase value of the stocks excl fee
@@ -117,15 +117,26 @@ def stock_page(stock_info_id):
 
         # if user already has the stock, execute this if statement
         if mongo.db.stocks_bought.count_documents(data_find) == 1:
+            # get the amount of stocks the user allready has
+            stocks_owned = data_find["stock_amount"]
+            # get the price of the amount of stocks the user allready has
+            stocks_price_owned = data_find["stock_price"]
+            # get the changed price per stock
+            changed_price_per_stock = (stocks_price_owned + price_change)/(
+                stocks_owned + get_stock_amount)
+
             # update the new purchase to the db
             mongo.db.stocks_bought.update_one(data_find, {'$inc': {
                 "stock_price": price_change,
-                "stock_amount": get_stock_amount}})
+                "stock_amount": get_stock_amount,
+                "price_per_stock": changed_price_per_stock}})
+
             # extract the stock buy price of the free cash of user and
             # add the cash spend on fee to the total spend on fees
             mongo.db.users.update_one(user_of_db, {'$inc': {
                 "cash": -total_spend_stock,
                 "total_spend_fees": spend_on_fee}})
+
             # add the fee value to the admin profile to see
             # how much the website has made so far
             mongo.db.users.update_one(user_is_admin, {'$inc': {
@@ -135,13 +146,17 @@ def stock_page(stock_info_id):
                   f"stocks for ${price_change}")
             return redirect(url_for("portfolio"))
         else:
-            # code to use when you don't have to stock
+            # get the price per stock
+            price_per_stock = price_change / get_stock_amount
+
+            # buy the new stock and upload the data to the db
             stock_bought = {
                 "stock_name_short": stock_name,
                 "stock_name": stock_title,
                 "bought_by": session["user"],
                 "stock_price": price_change,
-                "stock_amount": get_stock_amount
+                "stock_amount": get_stock_amount,
+                "price_per_stock": price_per_stock
             }
             # add new stock to database
             mongo.db.stocks_bought.insert_one(stock_bought)
@@ -171,7 +186,16 @@ def stock_page(stock_info_id):
 @app.route("/portfolio")
 def portfolio():
     stocks_bought = list(mongo.db.stocks_bought.find())
-    return render_template("portfolio.html", stocks_bought=stocks_bought)
+
+    live_prices = {
+        "GOOG": round(si.get_live_price("GOOG"), 2),
+        "TSLA": round(si.get_live_price("TSLA"), 2),
+        "UBER": round(si.get_live_price("UBER"), 2)
+    }
+
+    return render_template(
+        "portfolio.html", stocks_bought=stocks_bought,
+        live_prices=live_prices)
 
 
 @app.route("/sell/<stocks_bought_id>", methods=["POST"])
