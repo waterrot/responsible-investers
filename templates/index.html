@@ -43,28 +43,62 @@
             </div>
         </div>
     </div>
+    <br>
 
-    <div class="row">
-        {% for stock in stocks %}
-            <div class="col s12 m8 l4 offset-m2">
-                <div class="card horizontal min-height-card">
-                    <div class="card-image col s5 div-of-image-card">
-                        <img src="{{ stock.photo_link }}" class="image-card">
-                    </div>
-                    <div class="card-stacked">
-                        <div class="card-content padding-card">
-                            <h6><b>{{ stock.stock_name }}</b></h6>
-                            <p>{{ stock.description_short }}</p>
+    {% if session.user %}
+        <!-- the row with the electric/hybrid car stocks -->
+        <div class="row">
+            <h5 class="center"><b>Electric/hybrid cars stocks:</b></h5>
+            {% for stock in stocks %}
+                {% if stock.category == "electric/hybrid cars" %}
+                    <div class="col s12 m8 l4 offset-m2">
+                        <div class="card horizontal min-height-card">
+                            <div class="card-image col s5 div-of-image-card">
+                                <img src="{{ stock.photo_link }}" class="image-card">
+                            </div>
+                            <div class="card-stacked">
+                                <div class="card-content padding-card">
+                                    <h6><b>{{ stock.stock_name }}</b></h6>
+                                    <p>{{ stock.description_short }}</p>
+                                </div>
+                                <div class="card-action padding-card">
+                                    <a href="{{ url_for('stock_page', stock_info_id=stock._id) }}" class="btn btn-green">
+                                        read more
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-action padding-card">
-                             <a href="{{ url_for('stock_page', stock_info_id=stock._id) }}" class="btn btn-green">
-                                 read more
-                             </a>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <!-- the row with the big tech stocks -->
+        <div class="row">
+            <h5 class="center"><b>Big tech stocks:</b></h5>
+            {% for stock in stocks %}
+                {% if stock.category == "big tech" %}
+                    <div class="col s12 m8 l4 offset-m2">
+                        <div class="card horizontal min-height-card">
+                            <div class="card-image col s5 div-of-image-card">
+                                <img src="{{ stock.photo_link }}" class="image-card">
+                            </div>
+                            <div class="card-stacked">
+                                <div class="card-content padding-card">
+                                    <h6><b>{{ stock.stock_name }}</b></h6>
+                                    <p>{{ stock.description_short }}</p>
+                                </div>
+                                <div class="card-action padding-card">
+                                    <a href="{{ url_for('stock_page', stock_info_id=stock._id) }}" class="btn btn-green">
+                                        read more
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
 
 {% endblock %}
