@@ -264,3 +264,5 @@ Thanks [Slack Overflow](https://stackoverflow.com/) for giving me code idea's wh
 Thanks [Materialize](https://materializecss.com/) for providing basic code to make the basic elements on the side like the footer and header.
 
 Thanks to [Ask python](https://www.askpython.com/python-modules/flask/flask-error-handling) for helping me with making the functions for the 404 error and the 500 error.
+
+Thanks to [Luke Garnham](https://github.com/LukeGarnham/Wired-and-Wiser-MS3), I just his valider code as an inspiration for my own code.
