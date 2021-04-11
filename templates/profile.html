@@ -1,47 +1,49 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="row">
-        <div class="col s12 l8 offset-l2">
-            <div class="card horizontal min-height-card">
-                <div class="card-image col s12 m5 div-of-image-card hide-on-small-only">
-                    <img src="{{ url_for('static', filename='images/bot.jpg') }}" class="image-card">
-                </div>
-                <div class="card-stacked">
-                    <div class="card-content padding-card">
-                        <h5><b>Personal information:</b></h5>
-                        <form method="POST" action="{{ url_for('profile') }}">
-                            <!-- username -->
-                            <div class="row">
-                                <div class="input-field col s12 m6">
-                                    <i class="fas fa-edit prefix"></i>
-                                    <input id="username" name="username" type="text" minlength="5" maxlength="15"
-                                        pattern="^[a-zA-Z0-9]{5,15}$" class="validate" value="{{ session['user'] }}" required>
-                                    <label for="username">Username</label>
+    <div class="container">
+        <div class="row">
+            <div class="col s12 l10 offset-l1 mt-20">
+                <div class="card horizontal min-height-card">
+                    <div class="card-image col s12 m5 div-of-image-card hide-on-small-only">
+                        <img src="{{ url_for('static', filename='images/bot.jpg') }}" class="image-card">
+                    </div>
+                    <div class="card-stacked">
+                        <div class="card-content padding-card">
+                            <h5><b>Personal information:</b></h5>
+                            <form method="POST" action="{{ url_for('profile') }}">
+                                <!-- username -->
+                                <div class="row">
+                                    <div class="input-field col s12 m6">
+                                        <i class="fas fa-edit prefix"></i>
+                                        <input id="username" name="username" type="text" minlength="5" maxlength="15"
+                                            pattern="^[a-zA-Z0-9]{5,15}$" class="validate" value="{{ session['user'] }}" required>
+                                        <label for="username">Username</label>
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- email adres -->
-                            <div class="row">
-                                <div class="input-field col s12 m6">
-                                    <i class="fas fa-edit prefix"></i>
-                                    <input id="email" name="email" type="email" value="{{ user_email }}"
-                                        pattern="^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$" class="validate" required>
-                                    <label for="email">Email</label>
+                                <!-- email adres -->
+                                <div class="row">
+                                    <div class="input-field col s12 m6">
+                                        <i class="fas fa-edit prefix"></i>
+                                        <input id="email" name="email" type="email" value="{{ user_email }}"
+                                            pattern="^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$" class="validate" required>
+                                        <label for="email">Email</label>
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- information about the user -->
-                            <h6><b>Total spend fees:</b> ${{ send_on_fees }}</h6>
-                            <h6><b>free cash:</b> ${{ cash_of_user }}</h6>
-                            <!-- is the user is the admin he or she can see how much the business has made out of -->
-                            <!-- fees payed by the users of the platform -->
-                            {% if session.user == 'admin' %}
-                                <h6><b>Total money made by fees:</b> ${{ made_money }}</h6>
-                            {% endif %}
-                            <br>
-                            <!-- submit button -->
-                            <button type="submit" class="btn btn-green">
-                                Edit profile
-                            </button>
-                        </form>                        
+                                <!-- information about the user -->
+                                <h6><b>Total spend fees:</b> ${{ send_on_fees }}</h6>
+                                <h6><b>free cash:</b> ${{ cash_of_user }}</h6>
+                                <!-- is the user is the admin he or she can see how much the business has made out of -->
+                                <!-- fees payed by the users of the platform -->
+                                {% if session.user == 'admin' %}
+                                    <h6><b>Total money made by fees:</b> ${{ made_money }}</h6>
+                                {% endif %}
+                                <br>
+                                <!-- submit button -->
+                                <button type="submit" class="btn btn-green">
+                                    Edit profile
+                                </button>
+                            </form>                        
+                        </div>
                     </div>
                 </div>
             </div>

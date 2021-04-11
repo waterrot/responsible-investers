@@ -26,25 +26,27 @@
             <li><a href="{{ url_for('logout') }}">Logout</a></li>
         </ul>
         <nav class="nav-extended grey darken-3 min-height-110">
-            <div class="nav-wrapper">
-                <a href="{{ url_for('home') }}" class="brand-logo ml-2">
-                    <img src="{{ url_for('static', filename='images/logo_ri.png') }}" alt="logo Responsible Investors">
-                </a>
-                <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="fas fa-bars"></i></a>
-                <ul class="right hide-on-med-and-down">
-                    <li><a href="{{ url_for('home') }}" class="line-height-110"><i class="fas fa-home mr-1"></i>Home</a></li>
-                    {% if session.user %}
-                        <!-- profile dropdown -->
-                        <li>
-                            <a class="dropdown-trigger line-height-110" href="#!" data-target="dropdown-profile">
-                                Profile<i class="fas fa-caret-down ml-2"></i>
-                            </a>
-                        </li>
-                    {% else %}
-                        <li><a href="{{ url_for('login') }}" class="line-height-110">Login</a></li>
-                        <li class="line-height-110"><a class="btn btn-green" href="{{ url_for('register') }}">Register</a></li>
-                    {% endif %}
-                </ul>
+            <div class="container">
+                <div class="nav-wrapper">
+                    <a href="{{ url_for('home') }}" class="brand-logo ml-2">
+                        <img src="{{ url_for('static', filename='images/logo_ri.png') }}" alt="logo Responsible Investors">
+                    </a>
+                    <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="fas fa-bars"></i></a>
+                    <ul class="right hide-on-med-and-down">
+                        <li><a href="{{ url_for('home') }}" class="line-height-110"><i class="fas fa-home mr-1"></i>Home</a></li>
+                        {% if session.user %}
+                            <!-- profile dropdown -->
+                            <li>
+                                <a class="dropdown-trigger line-height-110" href="#!" data-target="dropdown-profile">
+                                    Profile<i class="fas fa-caret-down ml-2"></i>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li><a href="{{ url_for('login') }}" class="line-height-110">Login</a></li>
+                            <li class="line-height-110"><a class="btn btn-green" href="{{ url_for('register') }}">Register</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
         </nav>
 

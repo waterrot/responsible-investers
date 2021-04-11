@@ -1,164 +1,169 @@
 {% extends "base.html" %}
 {% block content %}
     
-    <div class="row">
-        <!-- title of page -->
-        <h4 class="ml-2 col s12 m10 l8 offset-m1 offset-l2 center"><b>Stocks you own:</b></h4>
+    <div class="container">
+        <div class="row">
+            <!-- title of page -->
+            <h4 class="ml-2 col s12 m10 l8 offset-m1 offset-l2 center"><b>Stocks you own:</b></h4>
+        </div>
     </div>
-    <div class="row">
-        <ul class="col s12 m10 l8 offset-m1 offset-l2 collapsible">
-            {% for stock_bought in stocks_bought %}
-                {% if session.user|lower == stock_bought.bought_by|lower %}
-                    {% for k, v in live_prices.items() %}
-                        {% if k == stock_bought.stock_name_short %}
-                            <li>
-                                <!-- the title of the the stock with the profit show -->
-                                <div class="collapsible-header">
-                                    <h6 class="ml-2">
-                                        <b>{{ stock_bought.stock_name }}</b>
-                                        <!-- an if statement to change the color of the text if there is a loss or profit -->
-                                        {% if v * stock_bought.stock_amount > stock_bought.stock_price %}
-                                            <i class="green-text">
-                                                +${{ v / stock_bought.price_per_stock * stock_bought.stock_price - stock_bought.stock_price }} (+{{ 100 * v / stock_bought.price_per_stock - 100 }}%)
-                                            </i>
-                                        {% elif v * stock_bought.stock_amount < stock_bought.stock_price %}
-                                            <i class="red-text">
-                                                -${{ v / stock_bought.price_per_stock * stock_bought.stock_price - stock_bought.stock_price }} (-{{ 100 * v / stock_bought.price_per_stock - 100 }}%)
-                                            </i>
-                                        {% else %}
-                                            <i class="blue-text">
-                                                ${{ v / stock_bought.price_per_stock * stock_bought.stock_price - stock_bought.stock_price }} ({{ 100 * v / stock_bought.price_per_stock - 100 }}%)
-                                            </i>
-                                        {% endif %}
-                                    </h6>
-                                </div>
-                                <div class="collapsible-body">
-                                    <table>
-                                        <tbody>
-                                            <tr class="no-border">
-                                                <!-- current stock price (one stock) -->
-                                                <td><b>Current stock price:</b>
-                                                    <!-- an if statement to change the color of the text if the current stock -->
-                                                    <!-- price is higher then when the user bought the stock -->
-                                                    {% if v > stock_bought.price_per_stock %}
-                                                        <i class="green-text">${{ v }}</i>
-                                                    {% elif v < stock_bought.price_per_stock %}
-                                                        <i class="red-text">${{ v }}</i>
-                                                    {% else %}
-                                                        <i class="blue-text">${{ v }}</i>
-                                                    {% endif %}
-                                                </td>
-                                                <!-- price per stock (bought) -->
-                                                <td><b>Price per stock (bought):</b> ${{ stock_bought.price_per_stock }}</td>
-                                            </tr>
-                                            <tr class="no-border">
-                                                <!-- live price of all stocks owned (to see for how much you can sell it) -->
-                                                <td><b>Current live value:</b>
-                                                    <!-- an if statement to give a color to the number depending if the stock -->
-                                                    <!-- can be sold for more, less or the same price compared to when the user -->
-                                                    <!-- bought the stock -->
-                                                    {% if v * stock_bought.stock_amount > stock_bought.stock_price %}
-                                                        <i class="green-text">
-                                                            ${{ v * stock_bought.stock_amount }}
-                                                        </i>
-                                                    {% elif v * stock_bought.stock_amount < stock_bought.stock_price %}
-                                                        <i class="red-text">
-                                                            ${{ v * stock_bought.stock_amount }}
-                                                        </i>
-                                                    {% else %}
-                                                        <i class="blue-text">${{ v * stock_bought.stock_amount }}</i>
-                                                    {% endif %}
-                                                </td>
-                                                <!-- total price for which the user bought the stocks -->
-                                                <td><b>Total value (bought):</b> ${{ stock_bought.stock_price }}</td>
-                                            </tr>
-                                            <tr class="no-border">
-                                                <!-- the profit/loss the user has made -->
-                                                <td><b>Total profit/loss:</b>
-                                                    <!-- an if statement to change the color of the text if there is a loss or profit -->
-                                                    {% if v * stock_bought.stock_amount > stock_bought.stock_price %}
-                                                        <i class="green-text">
-                                                            +${{ v / stock_bought.price_per_stock * stock_bought.stock_price - stock_bought.stock_price }}
-                                                            (+{{ 100 * v / stock_bought.price_per_stock - 100 }}%)
-                                                        </i>
-                                                    {% elif v * stock_bought.stock_amount < stock_bought.stock_price %}
-                                                        <i class="red-text">
-                                                            -${{ v / stock_bought.price_per_stock * stock_bought.stock_price - stock_bought.stock_price }}
-                                                            (-{{ 100 * v / stock_bought.price_per_stock - 100 }}%)
-                                                        </i>
-                                                    {% else %}
-                                                        <i class="blue-text">
-                                                            ${{ v / stock_bought.price_per_stock * stock_bought.stock_price - stock_bought.stock_price }}
-                                                            ({{ 100 * v / stock_bought.price_per_stock - 100 }}%)
-                                                        </i>
-                                                    {% endif %}
-                                                </td>
-                                                <!-- total amount of stocks bought -->
-                                                <td><b>Total amount of stocks owned:</b> {{ stock_bought.stock_amount }}</td>
-                                            </tr>
-                                            <tr class="no-border">
-                                                <td></td>
-                                                <td>
-                                                    <!-- sell the stock using this form -->
-                                                    <b>Sell stocks:</b>
-                                                    <form method="POST" action="{{ url_for('sell_stocks', stocks_bought_id=stock_bought._id) }}">
-                                                        <div class="row margin-0">
-                                                            <!-- fill in how many stocks you want to sell -->
-                                                            <div class="input-field col s4 margin-0 padding-0">
-                                                                <label class="no-left" for="stocks_sell">quantity</label>
-                                                                <input type="number" name="stocks_sell" id="stocks_sell" min="0" max="{{ stock_bought.stock_amount }}" required />
+    <div class="container">
+        <div class="row">
+            <ul class="col s12 m10 offset-m1 collapsible">
+                {% for stock_bought in stocks_bought %}
+                    {% if session.user|lower == stock_bought.bought_by|lower %}
+                        {% for k, v in live_prices.items() %}
+                            {% if k == stock_bought.stock_name_short %}
+                                <li>
+                                    <!-- the title of the the stock with the profit show -->
+                                    <div class="collapsible-header">
+                                        <h6 class="ml-2">
+                                            <b>{{ stock_bought.stock_name }}</b>
+                                            <!-- an if statement to change the color of the text if there is a loss or profit -->
+                                            {% if v * stock_bought.stock_amount > stock_bought.stock_price %}
+                                                <i class="green-text">
+                                                    +${{ v / stock_bought.price_per_stock * stock_bought.stock_price - stock_bought.stock_price }} (+{{ 100 * v / stock_bought.price_per_stock - 100 }}%)
+                                                </i>
+                                            {% elif v * stock_bought.stock_amount < stock_bought.stock_price %}
+                                                <i class="red-text">
+                                                    -${{ v / stock_bought.price_per_stock * stock_bought.stock_price - stock_bought.stock_price }} (-{{ 100 * v / stock_bought.price_per_stock - 100 }}%)
+                                                </i>
+                                            {% else %}
+                                                <i class="blue-text">
+                                                    ${{ v / stock_bought.price_per_stock * stock_bought.stock_price - stock_bought.stock_price }} ({{ 100 * v / stock_bought.price_per_stock - 100 }}%)
+                                                </i>
+                                            {% endif %}
+                                        </h6>
+                                    </div>
+                                    <div class="collapsible-body">
+                                        <table>
+                                            <tbody>
+                                                <tr class="no-border">
+                                                    <!-- current stock price (one stock) -->
+                                                    <td><b>Current stock price:</b>
+                                                        <!-- an if statement to change the color of the text if the current stock -->
+                                                        <!-- price is higher then when the user bought the stock -->
+                                                        {% if v > stock_bought.price_per_stock %}
+                                                            <i class="green-text">${{ v }}</i>
+                                                        {% elif v < stock_bought.price_per_stock %}
+                                                            <i class="red-text">${{ v }}</i>
+                                                        {% else %}
+                                                            <i class="blue-text">${{ v }}</i>
+                                                        {% endif %}
+                                                    </td>
+                                                    <!-- price per stock (bought) -->
+                                                    <td><b>Price per stock (bought):</b> ${{ stock_bought.price_per_stock }}</td>
+                                                </tr>
+                                                <tr class="no-border">
+                                                    <!-- live price of all stocks owned (to see for how much you can sell it) -->
+                                                    <td><b>Current live value:</b>
+                                                        <!-- an if statement to give a color to the number depending if the stock -->
+                                                        <!-- can be sold for more, less or the same price compared to when the user -->
+                                                        <!-- bought the stock -->
+                                                        {% if v * stock_bought.stock_amount > stock_bought.stock_price %}
+                                                            <i class="green-text">
+                                                                ${{ v * stock_bought.stock_amount }}
+                                                            </i>
+                                                        {% elif v * stock_bought.stock_amount < stock_bought.stock_price %}
+                                                            <i class="red-text">
+                                                                ${{ v * stock_bought.stock_amount }}
+                                                            </i>
+                                                        {% else %}
+                                                            <i class="blue-text">${{ v * stock_bought.stock_amount }}</i>
+                                                        {% endif %}
+                                                    </td>
+                                                    <!-- total price for which the user bought the stocks -->
+                                                    <td><b>Total value (bought):</b> ${{ stock_bought.stock_price }}</td>
+                                                </tr>
+                                                <tr class="no-border">
+                                                    <!-- the profit/loss the user has made -->
+                                                    <td><b>Total profit/loss:</b>
+                                                        <!-- an if statement to change the color of the text if there is a loss or profit -->
+                                                        {% if v * stock_bought.stock_amount > stock_bought.stock_price %}
+                                                            <i class="green-text">
+                                                                +${{ v / stock_bought.price_per_stock * stock_bought.stock_price - stock_bought.stock_price }}
+                                                                (+{{ 100 * v / stock_bought.price_per_stock - 100 }}%)
+                                                            </i>
+                                                        {% elif v * stock_bought.stock_amount < stock_bought.stock_price %}
+                                                            <i class="red-text">
+                                                                -${{ v / stock_bought.price_per_stock * stock_bought.stock_price - stock_bought.stock_price }}
+                                                                (-{{ 100 * v / stock_bought.price_per_stock - 100 }}%)
+                                                            </i>
+                                                        {% else %}
+                                                            <i class="blue-text">
+                                                                ${{ v / stock_bought.price_per_stock * stock_bought.stock_price - stock_bought.stock_price }}
+                                                                ({{ 100 * v / stock_bought.price_per_stock - 100 }}%)
+                                                            </i>
+                                                        {% endif %}
+                                                    </td>
+                                                    <!-- total amount of stocks bought -->
+                                                    <td><b>Total amount of stocks owned:</b> {{ stock_bought.stock_amount }}</td>
+                                                </tr>
+                                                <tr class="no-border">
+                                                    <td></td>
+                                                    <td>
+                                                        <!-- sell the stock using this form -->
+                                                        <b>Sell stocks:</b>
+                                                        <form method="POST" action="{{ url_for('sell_stocks', stocks_bought_id=stock_bought._id) }}">
+                                                            <div class="row margin-0">
+                                                                <!-- fill in how many stocks you want to sell -->
+                                                                <div class="input-field col s4 margin-0 padding-0">
+                                                                    <label class="no-left" for="stocks_sell">quantity</label>
+                                                                    <input type="number" name="stocks_sell" id="stocks_sell" min="0" max="{{ stock_bought.stock_amount }}" required />
+                                                                </div>
+                                                                <!-- the sell button -->
+                                                                <div class="input-field col s3 margin-0">
+                                                                    <button type="submit" class="btn red">
+                                                                        Sell
+                                                                    </button>
+                                                                </div>
                                                             </div>
-                                                            <!-- the sell button -->
-                                                            <div class="input-field col s3 margin-0">
-                                                                <button type="submit" class="btn red">
-                                                                    Sell
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
-        </ul>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 
     <!-- a card with the profile infromation of the user -->
-    <div class="row">
-        <div class="col s12">
-            <div class="card horizontal min-height-card">
-                <div class="card-image col s5 div-of-image-card">
-                    <img src="{{ url_for('static', filename='images/bot.jpg') }}" class="image-card">
-                </div>
-                <div class="card-stacked">
-                    <!-- information of the user -->
-                    <div class="card-content padding-card">
-                        <h5><b>Profile information:</b></h5>
-                        <h6><b>Username:</b> {{ session.user }}</h6>
-                        <h6><b>Email adress:</b> {{ user_email }}</h6>
-                        <h6><b>Total spend fees:</b> ${{ send_on_fees }}</h6>
-                        <h6><b>free cash:</b> ${{ cash_of_user }}</h6>
-                        <!-- show this to the admin user, the total amount of money made by -->
-                        <!-- fees paid by the users can be seen here -->
-                        {% if session.user == 'admin' %}
-                            <h6><b>Total money made by fees:</b> ${{ made_money }}</h6>
-                        {% endif %}
+    <div class="container">
+        <div class="row">
+            <div class="col s12">
+                <div class="card horizontal min-height-card">
+                    <div class="card-image col s5 div-of-image-card">
+                        <img src="{{ url_for('static', filename='images/bot.jpg') }}" class="image-card">
                     </div>
-                    <!-- button to go to the edit profile page -->
-                    <div class="card-action padding-card">
-                            <a href="{{ url_for('profile') }}" class="btn btn-green">
-                                Edit profile
-                            </a>
+                    <div class="card-stacked">
+                        <!-- information of the user -->
+                        <div class="card-content padding-card">
+                            <h5><b>Profile information:</b></h5>
+                            <h6><b>Username:</b> {{ session.user }}</h6>
+                            <h6><b>Email adress:</b> {{ user_email }}</h6>
+                            <h6><b>Total spend fees:</b> ${{ send_on_fees }}</h6>
+                            <h6><b>free cash:</b> ${{ cash_of_user }}</h6>
+                            <!-- show this to the admin user, the total amount of money made by -->
+                            <!-- fees paid by the users can be seen here -->
+                            {% if session.user == 'admin' %}
+                                <h6><b>Total money made by fees:</b> ${{ made_money }}</h6>
+                            {% endif %}
+                        </div>
+                        <!-- button to go to the edit profile page -->
+                        <div class="card-action padding-card">
+                                <a href="{{ url_for('profile') }}" class="btn btn-green">
+                                    Edit profile
+                                </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 {% endblock %}
