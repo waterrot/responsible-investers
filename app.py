@@ -305,8 +305,6 @@ def stock_page(stock_info_id):
 
     # code to buy the stocks
     if request.method == "POST":
-        # check if the market is open
-        # if market_status == "OPEN":
         # define variables
         # the criteria for when the stock is allready bought by the user
         data_find = {"bought_by": session["user"],
@@ -394,12 +392,7 @@ def stock_page(stock_info_id):
             flash(f"You successfully bought {get_stock_amount} " +
                   f"{stock_name} stocks for ${price_change}")
             return redirect(url_for("portfolio"))
-        # else:
-            # flash("the market is closed, you can only buy " +
-            # "stocks when the market is open.")
-            # return redirect(
-            #   url_for("stock_page", stock_info_id=get_stock_id))
-
+        
     return render_template(
         "stock.html", stock_info_first_part=stock_info_first_part,
         stock_info_second_part=stock_info_second_part, stock_price=stock_price,
@@ -446,8 +439,6 @@ def portfolio():
 
 @app.route("/sell/<stocks_bought_id>", methods=["POST"])
 def sell_stocks(stocks_bought_id):
-    # check if the market is open
-    # if market_status == "OPEN":
     # find the stock the user wants to sell
     stock_dic = mongo.db.stocks_bought.find_one(
         {"_id": ObjectId(stocks_bought_id)})
@@ -493,13 +484,9 @@ def sell_stocks(stocks_bought_id):
         flash(f"You successfully sold {stocks_sell_amount} {stock_name} " +
               f"stocks for ${stock_sell_price}")
         return redirect(url_for("portfolio"))
-    # else:
-        # flash("the market is closed, you can only buy " +
-        # "stocks when the market is open.")
-        # return redirect(url_for("portfolio"))
 
 
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
             port=int(os.environ.get("PORT")),
-            debug=True)
+            debug=False)

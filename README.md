@@ -202,19 +202,31 @@ login fuction. This function only requires the user to fill in their emailadres 
 
 ### Manual Testing
 
-When the user get the home page he/she can read the first card that comes on the screen. The text that is shown to the user is an intro to the game.
-The user also gets the choose to go either to the game page of donate something to the creator. 
+When the user want to register for the website he/she can go to the register page, by clicking on the register button in the navbar, and fill in their email, 
+username and password. When they have done that they created an account and can see more content on the site.
 
-When the user chooses for donating to the creator a modal will pop up. This modal asks the user if he or she wants to donate 1, 6 or 24 beer(s). 
-When the user presses the button with the amout of beers he or she want to donate the play now button will go to Paypal with that amout preset.
+When the user want to logout of the site they can press the logout button in the navbar.
 
-When the user chooses to go to the game page they will first see the "players section" if it is their first visit. Here they can fill in the player names.
-They can easily add and remove player names by pressing the "add player" or "remove player" button. If it is not clear to the user he or she can also click on the question mark icon.
-A modal will come up with an explanation on how the game works and how that specific section works. When the user presses the "start the game!" button the game will start.
+When the user want to login he/she can go to to the login page, by clicking on the link in the navbar, and fill in their emailadress and their password. 
+When they push the login button they are logged in again on the website.
 
-The user then will see a screen with first one randomly selected player from the players who manually where put into the website and then a randomly selected question/task he or she has to complete.
-By pressing on the card the next question and player will randomly be selected. There is also a reset button in the right down corner if the user would like to reset the game. A modal will then pop up with 
-the question if the user is sure about resetting the game. There is also another question mark icon in the top right corner that triggers a modal with how to play the game. 
+When the user get the home page he/she can read the first card that comes on the screen. The text that is shown to the user is an intro to website.
+When the user is logged in the CTA button will be go to the portfolio page and when the user is not logged in the CTA will be to register. 
+
+When the user is logged in and on the home page he/she can see all the stocks available to buy. The will see a card element with the stock title, 
+short stock description and a button to read more about the stock and buy it.
+
+When the user is on the page of a stock they can read more information about the stock and buy the stock by filling in the amount he/she wants to buy and then 
+press the buy button.
+
+When the user wants to see their open options they can go to the portfolio page by clicking on it on the link in the navbar. When they are on the page he/she can 
+see all the information about the stock.
+
+When to user wants to sell the stock he/she has to go to the portfolio page and then click on the stock they want to sell. Then fill in the amount of stocks he/she 
+wants to sell and then press the sell button.
+
+When the user wants to change their emailadres or their username they can go to the profile page by clicking on the link in the navbar. On this page the can fill in 
+the data they want to change and then press the change button to change that information.
 
 
 ### User Testing
@@ -222,10 +234,9 @@ the question if the user is sure about resetting the game. There is also another
 The website is fully working and users with no technical knowage can easily test it. I asked 3 friends if anything was unclear to them when they used the site.
 This resulted in the following changes:
 
--   Added a reset button to make the user experience better
--   Added information modals to the game to answer all the main questions
--   changed the home page to be more focussed on the game and not on donating
--   When the page refreshes the user will get a question if he or she would like to continue
+-   Fixed a valider function in python, the one for the password was not working correctly.
+-   Added a variable to the profile of the user so they can also see the total amount of money spend on fees.
+-   Changed the portfolio page, it first was a long horizontal list with information. But this was not very mobile friendly.
 
 
 ## Upcoming features
@@ -246,8 +257,10 @@ A number of new features will be implemented in the future.
 
 Thanks to [Felipe Alarcon](https://github.com/felipe-alarcon) for helping me with brainstorming on how to code curtain things and for helping me reflect on my own work.
 
-[My old Code Institute MSP2 project](https://github.com/jumboduck/CV-Builder) helped me in to create this readme file, I used that as a template.
+[My old Code Institute MSP2 project](https://github.com/waterrot/Ultimate-Piccolo-The-Game) helped me in to create this readme file, I used that as a template.
 
 Thanks [Slack Overflow](https://stackoverflow.com/) for giving me code idea's when I was not curtain on how to code something.
 
-Thanks [Materialize](https://materializecss.com/) for providing basic code to make the basic elements on the side like the footer and header. 
+Thanks [Materialize](https://materializecss.com/) for providing basic code to make the basic elements on the side like the footer and header.
+
+Thanks to [Ask python](https://www.askpython.com/python-modules/flask/flask-error-handling) for helping me with making the functions for the 404 error and the 500 error.
