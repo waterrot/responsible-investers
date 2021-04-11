@@ -1,4 +1,4 @@
-![Responsible Investors](static/images/logo_ri_big.png)
+![Responsible Investors](static/images/readme/logo_ri_big.png)
 
 ## Table of Contents
 
@@ -12,11 +12,11 @@
     -   [Wireframes](#wireframes)
     -   [Design](#design)
 -   **[Features](#features)**
-    -   [Diffent Sections](#different-sections)
-    -   [Save Function](#save-function)
-    -   [Add and delete players function](#add-and-delete-players-function)
-    -   [Reset Game](#reset-game)
-    -   [Responsive Design](#responsive-design)
+    -   [Different pages](#different-pages)
+    -   [buy a stock function](#buy-a-stock-function)
+    -   [sell function and portfolio](#sell-function-and-portfolio)
+    -   [profile updating](#profile-updating)
+    -   [Login and register page](#Login-and-register-page)
 -   **[Technologies](#technologies)**
 -   **[Tools](#tools)**
 -   **[Testing](#testing)**
@@ -29,9 +29,9 @@
 
 ## Description
 
-"Responsible Investors is a online broker platform where people can make an account and buy and trade in responsible stocks. The 12 stocks selected for the site are mostly companies who are working on making our planet a better place. Every user gets $10000 (fake) dollars to trade with. Every user pays a small fee ($0.50 + 0,3%) for every trade they make, with this money we from Responsible Investors can keep updating our platform" 
+"Responsible Investors is a online broker platform where people can make an account and buy and trade in responsible stocks. The 9 stocks selected for the site are mostly companies who are working on making our planet a better place. Every user gets $10000 (fake) dollars to trade with. Every user pays a small fee ($0.50 + 0,3%) for every trade they make, with this money we from Responsible Investors can keep updating our platform" 
 
-![responsive site](static/images/site_view_on_different_screens.jpg)
+![responsive site](static/images/readme/site_view_on_different_screens.jpg)
 
 ---
 
@@ -67,7 +67,7 @@ In your local IDE:
 
 ### Live Demo
 
-The live demo of the cv builder has been deployed to Heroku and is accessible [here](http://responsible-investors.herokuapp.com/).
+The live demo of the website has been deployed to Heroku and is accessible [here](http://responsible-investors.herokuapp.com/).
 
 ---
 
@@ -103,19 +103,19 @@ These goals are accomplished in the following way:
 
 ### Wireframes
 
-The wireframe was made by hand. The final version of the wireframes can be found [here](assets/images/readme/wireframe.png)
+The wireframe was made by hand. The final version of the wireframes can be found [here](static/images/readme/wireframe.jpeg)
 
 ### Design
-When the website was made it had a focus on mobile and on desktop vieuw. down below you can find the 2 main design challenges: 
+When the website was made it had a focus on mobile and on desktop vieuw. down below you can find 2 of main design challenges: 
 
 #### colors
-The green color (#00c853) was choosen from the standaard colors of Materialize. For a broker the color green and red are important,
- these 2 colors are associated with 'win/loss' and influences to users unconsciously. For the red color we choose #F44336, this color 
+The green color (#00c853) was choosen from the standaard colors of Materialize. For a broker the color green and red are important, 
+these 2 colors are associated with 'win/loss' and influences to users unconsciously. For the red color we choose #F44336, this color 
  was also chosen with the help of Materialize.
 
 #### Logo
 The logo was made with help of [Canva](https://canva.com). I used windmills and an arrow who points upwords. I choose for this because the image 
-of the website is green/responsible investing and a combination of gaining money (what the arrow symbolizes) and the windmill, who stends for a green world,
+of the website is green/responsible investing and a combination of gaining money (what the arrow symbolizes) and the windmill, who stands for a green world,
 seems like a good combination for that.
 
 ![Responsible Investors](static/images/logo_ri.png)
@@ -124,49 +124,56 @@ seems like a good combination for that.
 
 ## Features
 
-### different Sections
+### different Pages
 
-The website can be divided into four main sections:
+The website has 8 main (template) pages the user can use. These are the most important ones for the use of the website:
 
--   **Welcome Section** This section is a card designed section where people read about the game and continue to another page.
-    ![welcome section](assets/images/readme/welcome-section.png)
--   **Donate Section** This section is creates a possibility so that people can donate to the creator.
-    ![donate section](assets/images/readme/donate-section.png)
--   **Players Section** Here players can be added and deleted. and there is an information modal on this section.
-    ![players section](assets/images/readme/players-section.png)
--   **Game Section** there the randomly selected name and the randomly selected question will be displayed.
-    ![game section](assets/images/readme/game-section.png)
+-   **Home page** This section is a card designed section where people can read the introduction to the site (diffent text and call to action for logged in/logged out) and when logged in the user can see the diffent stocks they can choose from. In these card is also a button so they can go to that stock page.
+    ![cards on home page](static/images/readme/cards-of-stocks.jpg)
+-   **Stock page** On this page users can read more information about the stock. They can see a graph (just a photo), read a description about the company, read technicall infromation about the stock and buy the stock. every stock has his own page, so there are 9 of these pages.
+    ![Stock page](static/images/readme/Stock-pages.jpg)
+-   **Portfolio page** Here users who are logged in can see their stock and how they are performing. Next to seeing how they are performing users can also sell their stocks on this page. And below the portfolio users can see there account datails and can click on it to edit there information.
+    ![Portfolio page](static/images/readme/portfolio-page.jpg)
+-   **Profile page** On this page users can see their personal information and can also change it here. And the admin user can also see how much the website has made for the company, more about this will follow later in this document.
+    ![Profile page](static/images/readme/profile-page.jpg)
+-   **error 404 page** When people come on a page on the site that is not existing they will come at the error 404 page. On this page the user can see that they have an error 404 and get a link to go back to the homepage. On this page there is also a GIF of a cartoon searching for something. This has been added give a smile on the face of a frustrated user who is not finding the page he/she is looking for. Down below you can see this page but it is better to see the live version of it because of the moving GIF.
+    ![error 404 page](static/images/readme/error-404-page.jpg)
+-   **The other pages** The other pages are the error 500 page, login and register. These pages will be discussed at the functions part here below.
 
-Sections are responsive and have dynamic element with them. 
 
-### Save Function
+### buy a stock function
 
-The game make use of the local storage so it is not a problem when players refresh the page.
-The names that where filled in by the players are stored in an array in the local storage and are randomly selected when you click on the screen.
-The questions and card are also stored in an array in the local storage. Every time the player clicks on the screen a random other item from the array will be selected and the old one will be deleted from local storage.
-Any changes made to the CV or its theme can be saved to be updated at a later time.
-In the picture down below you can see the local storage with the 2 saved arrays:
+On the stock page users can buy a stock. They have to fill in the amount of stocks they want to buy and then and press the buy button. When the user changes the amount of stocks
+the total price will change on the display. When the stock is bought the the total price of the stocks will be deducted from their free cash available (everyone gets a 10k when signing up). 
+For this reason a user can never buy more stocks then free cash he/she has. And the stock will be pushed to the database and will be shown on the portfolio page. There is also a small fee for 
+buy a stock, for every purchase a user pays $0.50 + 0,3% to the website. The total amount of money for every user can be seen on the profile and portfolio page. On the photo below you can 
+see the stock page of tesla with the buy function in it.
+![Buy a stock fuction](static/images/readme/Stock-pages.jpg)
 
-![local storage](assets/images/readme/local-storage.png)
+### sell function and portfolio 
 
-### Add and delete players function
+On the portfolio page the user can sell their stocks. They can type in the amount of stocks they want to sell (with the max of their own stocks owned). The sell price will be
+added back to the free cash available so that the user can buy new stock if he or she prefers that. In the same section as the sell function the user can also see how their stock 
+is performing. they can see: current stock price, the avg bought price, total value position, total bought price position, profit/loss in $ and % and the total stocks owned. 
+Down below you can see a picture of the portfolio with all the information and the sell function.
+![Sell function and portfolio](static/images/readme/portfolio-page.jpg)
 
-In the players section there are 2 buttons to add and delete players. The add button is made with the help of a "for loop" and the delete button deletes the newest input field. 
-In the picture down below you can see the 2 buttons, the "add player" and "remove player" buttons:
+### profile updating
 
-![add and remove buttons](assets/images/readme/players-section.png)
+On the profile page it is possible to change the emailadres and the username. Next changing the email and username the user can see the free cash available, 
+total money spend on fees and for the admin user it is also possible to see how much money the website has made in fees. All the fees paid by users will add 
+up and be show here to the admin. Down below it is posible to see how this looks like. If anybody would like to see how this looks like in the life website 
+they can send a email to oudloosdrecht@gmail.com. For security reasons I can not upload the login of the admin in the readme file. 
 
-### Reset Game
+![Porfile page](static/images/readme/profile-page.jpg)
 
-The reset button on in the game section deletes the local storage and refreshes the page. before this is done the player will be asked if he or she want to continue with it.
-When the page is refeshed the player will get the same question if he or she would like to continue the game or start a new one. On the picture below you can see this notification in the modal.
+### Login and register page
 
-![reset notification](assets/images/readme/reset-notification.png)
-
-### Responsive Design
-
-This application is build mobile first because it will mostly be used on small gatherings where most people do not have a laptop with them.
-With the help of Bootstrap the screens on different screen sizes could easily be editted. The website is customized for all screen sizes with some help to the Google Chrome's dev tools bugs could easily be fixed.
+On the register page new users can create an account. They have to fill in a username, their emailadress and a password. This data first will be validated with 
+some valide function in the python code and then will be checked if it is not allready existing in the database. If the data passed all the test the user will 
+be created and the users can see more content on the site. All these data will be stored in the database, but the password will not be visible in the database. 
+the password has been protected with Werkzeug, so even the owner of the database can not see the password. The user can also logout and later login using the 
+login fuction. This function only requires the user to fill in their emailadres and their password. 
 
 ---
 
@@ -175,8 +182,11 @@ With the help of Bootstrap the screens on different screen sizes could easily be
 -   HTML
 -   CSS
 -   JavaScript
+-   Python
+-   regex
+-   [MongoDB](https://mongodb.com)
 -   [JQuery](https://jquery.com/)
--   [Bootstrap](https://getbootstrap.com/)
+-   [Materialize](https://materializecss.com/)
 ---
 
 ## Tools
@@ -184,8 +194,8 @@ With the help of Bootstrap the screens on different screen sizes could easily be
 -   Pen and paper to create the wireframe
 -   [Canva](https://canva.com) to create the logo
 -   [Font Awesome](https://fontawesome.com/): used for all icons throughout the site
--   [Google Fonts](https://fonts.google.com/): All the fonts were imported from Google Fonts
 -   [ResponsiveDesign.is](http://ami.responsivedesign.is/): used to make a photo of how the website will look in different screen sizes.
+-   [yahoofinancials](https://pypi.org/project/yahoofinancials/): I used this API (togetter with the [yfinance](https://pypi.org/project/yfinance/), while I needed both to fullfill my wishes)to get the data from the stocks so that it could been shown on the site.
 ---
 
 ## Testing
@@ -222,13 +232,13 @@ This resulted in the following changes:
 
 A number of new features will be implemented in the future.
 
--   Multible packages of questions so an user can select a question pack based on a theme. 
+-   Adding stocks from diffent currencies and calculate them back to the us dollar so a user can by the stock. 
 
--   A form where users can upload their own questions to us so that we could add it to one of the packages.
+-   When the market is closed make sure the users cannot trade anymore. In the real world people this is also the case. But to make testing around the platform easier this function has been deleted from the website.
 
--   A Function where people can make their own question packs with their own questions and pre made questions.
+-   Adding more stocks, right now there are only 9 stocks available, it would be better to have more stocks available in the future.
 
--   Make it possible to delete a specific player instead of only the last one entered.
+-   Adding a search function to the site to look for stocks.
 
 ---
 
@@ -236,10 +246,8 @@ A number of new features will be implemented in the future.
 
 Thanks to [Felipe Alarcon](https://github.com/felipe-alarcon) for helping me with brainstorming on how to code curtain things and for helping me reflect on my own work.
 
-[The following Code Institute student project](https://github.com/jumboduck/CV-Builder) helped me in to create this readme file.
+[My old Code Institute MSP2 project](https://github.com/jumboduck/CV-Builder) helped me in to create this readme file, I used that as a template.
 
 Thanks [Slack Overflow](https://stackoverflow.com/) for giving me code idea's when I was not curtain on how to code something.
 
-Thanks [Code Pen IO](https://codepen.io/rsherry/pen/QwoqyO) for giving me tips on how to make the add and remove players Javascript code.
-
-The footer was made with help of a previous project about making a [CV](https://github.com/waterrot/CV).
+Thanks [Materialize](https://materializecss.com/) for providing basic code to make the basic elements on the side like the footer and header. 
